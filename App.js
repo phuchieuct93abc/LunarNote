@@ -1,8 +1,8 @@
 import React from 'react';
-import List from './pages/list'
+import List from './src/pages/list'
 import {  AppRegistry,Text, View ,Button,FlatList} from 'react-native';
 
-import {  StackNavigator} from 'react-navigation';
+import {  StackNavigator} from 'react-navigation'; 
 
 
 export  class HomeScreen extends React.Component {
@@ -49,14 +49,14 @@ export  class HomeScreen extends React.Component {
     ]
 
     return (
-      <View style={{flex:1,padding:20}}>
+      <View style={{flex:1}}> 
           <View>
             <Text>Header</Text>
           </View>
 
           <View style={{flexDirection: 'column',flex:1,flexWrap: 'wrap'}}>
  
-                  {buttons.map((item) => {return <Button style={{height:30}} title={item.name} onPress={()=>navigate("List",{item:item})}></Button>})}
+                  {buttons.map((item) => {return <Button key={item.key} style={{height:30}} title={item.name} onPress={()=>navigate("List",{item:item})}></Button>})}
 
           </View>
 
