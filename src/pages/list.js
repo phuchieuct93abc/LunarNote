@@ -41,15 +41,19 @@ export default  class List extends React.Component {
           <ActivityIndicator />
         </View>
       );
-    }
-    return (
+    }else{
+  return (
       <View style={{flex: 1}}> 
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <View style={{ padding: 5}}><ListItem article={rowData}></ListItem></View>}
+          renderRow={(rowData) => <View style={{ padding: 5}}><ListItem navigate={this.props.navigation} article={rowData}></ListItem></View>}
         />
       </View>
     );
+
+      
+    }
+  
   }
 }
 
