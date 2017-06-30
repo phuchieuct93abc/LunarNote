@@ -13,22 +13,28 @@ export  default class ViewItem extends React.Component {
       this.state= {article:this.article}
 
   }
-  updateImage(html){
-            const screenWidth = Dimensions.get('window').width;
-            console.log("@@@@@@@",screenWidth)
-            var replace = "<img height='100000' width='10000000' ".replaceAll("{width}",screenWidth)    
- 
-          return html.replaceAll("<img",replace)
+  _renderNode(node, index, siblings, parent, defaultRenderer) {
+    console.log(node.name)
+     /* if (node.name == 'img') {
+        const attribs = node.attribs;
+            const screenWidth = Dimensions.get('window').width
+            console.log(attribs.src)
+        return (
+              <Image key={index} source={{uri: attribs.src}} resizeMode="contain"
+                 style={{ flex: 1}}  /> 
+        ); 
+      }*/
+}
 
 
-  }
+
   componentDidMount(){
 
 
      return fetch('http://dataprovider.touch.baomoi.com/json/article.aspx?articleId='+this.article.ContentID)
       .then((response) => response.json())
       .then((responseJson) => {
-                  this.article.Content = this.updateImage(responseJson.article.Body) 
+                  this.article.Content = responseJson.article.Body
 
         this.setState(
             {article:this.article}
@@ -36,7 +42,7 @@ export  default class ViewItem extends React.Component {
         
       })
       .catch((error) => {
-        console.error(error);   
+        console.error(error);     
       });
 
 
@@ -47,10 +53,12 @@ export  default class ViewItem extends React.Component {
        return (
 
           <ScrollView>
-          <View style={{flex:1}}>
+          <View style={{flex:1,padding:20}}>
            <HTMLView
               value={this.state.article.Content} 
+              renderNode={this._renderNode} 
             />
+            <Text>{this.state.article.Content} </Text>
             </View>
           </ScrollView>
 

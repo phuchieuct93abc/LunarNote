@@ -26,7 +26,7 @@ export default  class ListItem extends React.Component {
            <View style={{flex:1,flexDirection:"column"}}>
 
             <Image source={{uri: this.props.article.LandscapeAvatar}} 
-             style={{flex:3,width:screenWidth,height:100}} />
+             style={{flex:3,width:screenWidth,height:150}} /> 
             <Text style={{flex:1}} >{this.props.article.Title}</Text>  
           </View>
         </TouchableNativeFeedback>
