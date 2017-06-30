@@ -1,7 +1,7 @@
 import React from 'react';
 import List from './src/pages/list'
 import ViewItem from './src/pages/viewItem'
-import {  AppRegistry,Text, View ,Button,FlatList} from 'react-native';
+import { StatusBar, AppRegistry,Text, View ,Button,FlatList} from 'react-native';
 
 import {  StackNavigator} from 'react-navigation'; 
 
@@ -51,6 +51,10 @@ export  class HomeScreen extends React.Component {
 
     return (
       <View style={{flex:1}}>  
+         <StatusBar
+     backgroundColor="blue"
+     barStyle="light-content"  
+   />
           <View>
             <Text>Header</Text>
           </View>
