@@ -86,7 +86,7 @@ export default class ViewItem extends React.Component {
         </Text>
 
         <Text>
-          {this.state.article.Content}{" "}
+          {this.state.article.Content}
         </Text>
       </ScrollView>
     );

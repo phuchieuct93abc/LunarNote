@@ -1,10 +1,13 @@
 import React from 'react';
 import List from './src/pages/list'
 import ViewItem from './src/pages/viewItem'
-import { StatusBar, AppRegistry,Text, View ,Button,FlatList} from 'react-native';
+import { Button } from 'react-native-elements';
+import { StatusBar, AppRegistry,Text, View ,FlatList} from 'react-native';
 
 import {  StackNavigator} from 'react-navigation'; 
-
+const Color={
+  button:"#2096F3"
+}
 
 export  class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -61,7 +64,7 @@ export  class HomeScreen extends React.Component {
 
           <View style={{flexDirection: 'column',flex:1,flexWrap: 'wrap'}}>
  
-                  {buttons.map((item) => {return <Button key={item.key} style={{height:30}} title={item.name} onPress={()=>navigate("List",{item:item})}></Button>})}
+                  {buttons.map((item) => {return <Button raised backgroundColor={Color.button} key={item.key} style={{height:30}} title={item.name} onPress={()=>navigate("List",{item:item})}></Button>})}
 
           </View>
 

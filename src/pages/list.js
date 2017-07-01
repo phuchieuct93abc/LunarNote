@@ -88,7 +88,7 @@ export default class List extends React.Component {
           }
           dataSource={this.state.dataSource}
           renderRow={rowData =>
-            <View style={{ padding: 5 }}>
+            <View style={{ padding:1 }}>
               <ListItem navigate={this.props.navigation} article={rowData} />
             </View>}
         />
