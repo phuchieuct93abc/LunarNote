@@ -30,7 +30,7 @@ export default  class ListItem extends React.Component {
 
         <View>
         <TouchableNativeFeedback 
-            onPress={() => navigate("ViewItem",{article:this.props.article})}
+            onPress={() => navigate("ViewItem",{article:this.props.article;})}
             background={Platform.OS === 'android' ? TouchableNativeFeedback.SelectableBackground() : ''}>
            <View style={{flex:1,flexDirection:"column"}}>
           <Image source={{uri: imageUri}} 
