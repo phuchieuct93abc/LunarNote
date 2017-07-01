@@ -18,6 +18,7 @@ export default class List extends React.Component {
       isLoading: true,
     };
     currentIndex = 0;
+    this._firstLoad = this._firstLoad.bind(this); 
   }
 
 
@@ -34,6 +35,16 @@ export default class List extends React.Component {
     
   }
     componentDidMount() {
+          this.setState({ isLoading: true }); 
+
+    this._firstLoad()
+   
+  }
+  _onRefresh() {
+    this.setState({ isLoading: true });
+    this._firstLoad()
+  }
+  _firstLoad(){
     this._fetchData(0).then((response)=>{
       this.articles = response;
      this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -43,11 +54,8 @@ export default class List extends React.Component {
     });
 
     });
-   
-  }
-  _onRefresh() {
-    this.setState({ isLoading: true });
-    this._fetchData();
+
+
   }
   _getMore(){
     console.log("get more",currentIndex)
@@ -68,6 +76,11 @@ export default class List extends React.Component {
 
 
 
+
+
+
+
+
   render() {
     const { params } = this.props.navigation.state;
     if (this.state.isLoading) {
@@ -76,7 +89,9 @@ export default class List extends React.Component {
           <ActivityIndicator />
         </View>
       );
-    } else {
+    } 
+
+
       return (
         <View style={{ flex: 1 }}>
           <ListView
@@ -97,6 +112,6 @@ export default class List extends React.Component {
           />
         </View>
       );
-    }
+    
   }
 }

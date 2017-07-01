@@ -15,19 +15,29 @@ export default  class ListItem extends React.Component {
   render() {
     const screenWidth = Dimensions.get('window').width - 10 
     const { navigate } = this.props.navigate;
+        let imageUri = this.props.article.LandscapeAvatar
 
-   
+        if(imageUri == null || imageUri == ""){
+               imageUri =  "http://rscmireland.com/news/News.jpg" 
+
+          }
+    
 
       return (
+
+
+
+
         <View>
         <TouchableNativeFeedback 
             onPress={() => navigate("ViewItem",{article:this.props.article})}
             background={Platform.OS === 'android' ? TouchableNativeFeedback.SelectableBackground() : ''}>
            <View style={{flex:1,flexDirection:"column"}}>
-
-            <Image source={{uri: this.props.article.LandscapeAvatar}} 
+          <Image source={{uri: imageUri}} 
              style={{flex:3,width:screenWidth,height:150}} /> 
-            <Text style={{flex:1}} >{this.props.article.Title}</Text>  
+           
+           
+            <Text style={{flex:1}} >{this.props.article.Title}</Text>   
           </View>
         </TouchableNativeFeedback>
         </View>

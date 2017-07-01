@@ -1,6 +1,8 @@
 import React from 'react';
-import {TouchableNativeFeedback,Platform,ActivityIndicator,Alert, Image, Text, View,Button,FlatList,Dimensions,ScrollView } from 'react-native';
+import {StyleSheet,TouchableNativeFeedback,Platform,ActivityIndicator,Alert, Image, Text, View,Button,FlatList,Dimensions,ScrollView } from 'react-native';
 import HTMLView from 'react-native-htmlview';
+import Video from 'react-native-video'
+
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
@@ -14,53 +16,67 @@ export  default class ViewItem extends React.Component {
 
   }
   _renderNode(node, index, siblings, parent, defaultRenderer) {
-    console.log(node.name)
-     /* if (node.name == 'img') {
-        const attribs = node.attribs;
-            const screenWidth = Dimensions.get('window').width
-            console.log(attribs.src)
-        return (
-              <Image key={index} source={{uri: attribs.src}} resizeMode="contain"
-                 style={{ flex: 1}}  /> 
-        ); 
-      }*/
+    if(node.name=="p" && node.attribs.class=="body-image"){
+      let url = node.children[0].attribs.src
+          const screenWidth = Dimensions.get('window').width - 10 
+
+         return (<Image key={index} source={{uri: url}}  style={{flex:3,width:screenWidth,height:150}}  /> )
+           
+              
+    }else     if(node.name=="p" && node.attribs.class=="body-video"){
+      let source = node.children[0].children[0].attribs['data-src'];
+
+
+
+    }
+
+}
+async _getArticleContent(contentId){
+
+  let content =  await fetch('http://dataprovider.touch.baomoi.com/json/article.aspx?articleId='+contentId)
+  let response = await content.json();
+  return response.article.Body 
 }
 
 
-
   componentDidMount(){
+    this._getArticleContent(this.article.ContentID).then((content)=>{
 
-
-     return fetch('http://dataprovider.touch.baomoi.com/json/article.aspx?articleId='+this.article.ContentID)
-      .then((response) => response.json())
-      .then((responseJson) => {
-                  this.article.Content = responseJson.article.Body
-
-        this.setState(
-            {article:this.article}
+      this.article.Content = content;
+       this.setState(
+            {article:this.article}  
           )
-        
-      })
-      .catch((error) => {
-        console.error(error);     
-      });
+
+    })
+
 
 
   }
- 
+   static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.article.SourceName}`,
+  });
 
   render() {
+    let videoUrl = "http://baomoi-video-tr.zadn.vn/b79e18d6708046802a5a49821ae35c4c/595860a9/streaming.baomoi.com/2017/07/01/255/22652235/4706329.mp4"
+
+
        return (
 
-          <ScrollView>
-          <View style={{flex:1,padding:20}}>
-           <HTMLView
+          <ScrollView style={styles.wrapper}>
+          <Text  style={styles.title}>{this.state.article.Title}</Text>
+          <Text  style={styles.description}>{this.state.article.Description}</Text>
+          <View>
+           <HTMLView stylesheet={styles}
               value={this.state.article.Content} 
-              renderNode={this._renderNode} 
+              renderNode={this._renderNode}  
             />
-            <Text>{this.state.article.Content} </Text>
-            </View>
-          </ScrollView>
+          </View>
+
+                      <Text>{this.state.article.ContentID}
+                       </Text>  
+
+            <Text>{this.state.article.Content} </Text> 
+          </ScrollView>  
 
        
       );
@@ -69,4 +85,26 @@ export  default class ViewItem extends React.Component {
 
   }
 }
-
+const styles = StyleSheet.create({
+  title:{
+   fontSize: 30, 
+   fontWeight:"bold"
+  },
+  description:{
+    fontSize: 25, 
+    marginBottom:5, 
+    fontStyle: "italic" 
+  },
+  p:{
+      fontSize: 20, 
+      paddingLeft:20
+  },
+  wrapper:{
+    padding:10 
+  },
+   backgroundVideo: {
+  
+    height:300,
+    width:300  
+  },
+});
