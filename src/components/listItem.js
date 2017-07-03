@@ -23,8 +23,8 @@ export default class ListItem extends React.Component {
 
   render() {
     const screenWidth = Dimensions.get("window").width - 10;
-    const { navigate } = this.props.navigate;
     let imageUri = this.props.article.LandscapeAvatar;
+    let onSelected = this.props.onSelected
 
     if (imageUri == null || imageUri == "") {
       imageUri = "http://rscmireland.com/news/News.jpg";
@@ -33,7 +33,7 @@ export default class ListItem extends React.Component {
     return (
       <Card containerStyle={{padding: 1}}>
         <TouchableNativeFeedback
-          onPress={() => navigate("ViewItem", { article: this.props.article })}
+          onPress={() => onSelected(this.props.index)}
           background={
             Platform.OS === "android"
               ? TouchableNativeFeedback.SelectableBackground()
@@ -47,7 +47,7 @@ export default class ListItem extends React.Component {
             />
             <View style={{padding:5}}>
                  <Text h4> 
-              {this.props.article.Title} 
+              {this.props.article.Title} {this.props.index}
             </Text>
 
 

@@ -1,6 +1,9 @@
 import React from 'react';
 import List from './src/pages/list'
 import ViewItem from './src/pages/viewItem'
+import ViewPager from './src/pages/viewPager'
+
+
 import { Button } from 'react-native-elements';
 import { StatusBar, AppRegistry,Text, View ,FlatList} from 'react-native';
 
@@ -58,10 +61,7 @@ export  class HomeScreen extends React.Component {
      backgroundColor="blue"
      barStyle="light-content"  
    />
-          <View>
-            <Text>Header</Text>
-          </View>
-
+          
           <View style={{flexDirection: 'column',flex:1,flexWrap: 'wrap'}}>
  
                   {buttons.map((item) => {return <Button raised backgroundColor={Color.button} key={item.key} style={{height:30}} title={item.name} onPress={()=>navigate("List",{item:item})}></Button>})}
@@ -82,6 +82,7 @@ const Navigator = StackNavigator({
   Home: { screen: HomeScreen }, //Default entry screen
   List: { screen: List }, //Default entry screen
   ViewItem: { screen: ViewItem }, //Default entry screen
+  ViewPager:{screen:ViewPager}
 });
 
 export default Navigator 

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import ListItem from "../components/listItem";
 
+
 export default class List extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,7 @@ export default class List extends React.Component {
     };
     currentIndex = 0;
     this._firstLoad = this._firstLoad.bind(this);
+    this._onSelectedArticle = this._onSelectedArticle.bind(this)
   }
 
   async _fetchData(from) {
@@ -64,9 +66,14 @@ export default class List extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.item.name}`
   });
+  _onSelectedArticle(index){
+    console.log("@@@@@@@@@@@@@@@",index)
+    this.props.navigation.navigate("ViewPager", { index: index,articleList:this.articles })
+  }
 
   render() {
     const { params } = this.props.navigation.state;
+
     if (this.state.isLoading) {
       return (
         <View style={{ flex: 1 }}>
@@ -87,9 +94,9 @@ export default class List extends React.Component {
             />
           }
           dataSource={this.state.dataSource}
-          renderRow={rowData =>
+          renderRow={(rowData,sex,index) => 
             <View style={{ padding:1 }}>
-              <ListItem navigate={this.props.navigation} article={rowData} />
+              <ListItem  article={rowData} onSelected={this._onSelectedArticle} index={index} />
             </View>}
         />
       </View>
