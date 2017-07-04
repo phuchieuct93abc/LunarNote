@@ -28,7 +28,6 @@ export default class ViewItem extends React.Component {
   }
   _onBackVideo() {}
   _loadStart() {
-    console.log(this.player);
   }
   _renderNode(node, index, siblings, parent, defaultRenderer) {
     const screenWidth = Dimensions.get("window").width - 10;

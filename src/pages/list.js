@@ -67,7 +67,6 @@ export default class List extends React.Component {
     title: `${navigation.state.params.item.name}`
   });
   _onSelectedArticle(index){
-    console.log("@@@@@@@@@@@@@@@",index)
     this.props.navigation.navigate("ViewPager", { index: index,articleList:this.articles })
   }
 
