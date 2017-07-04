@@ -14,7 +14,7 @@ import {
   ScrollView
 } from "react-native";
 import HTMLView from "react-native-htmlview";
-import VideoPlayer from "react-native-video-controls";
+import CustomVideoPlayer from "../components/videoPlayer";
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
   return target.replace(new RegExp(search, "g"), replacement);
@@ -45,31 +45,24 @@ export default class ViewItem extends React.Component {
         </View>
       );
     } else if (node.name == "p" && node.attribs.class == "body-video") {
-      let source = node.children[0].children[0].attribs["data-src"];
+      let video = node.children[0].children[0].attribs["data-src"];
+      let poster = node.children[0].attribs["poster"]
       return (
-        <VideoPlayer
-          source={{ uri: source }} // Can be a URL or a local file.
-          ref={ref => {
-            this.player = ref;
-          }}
-          paused={true}
-          onBack={this._onBackVideo}
-          onLoadStart={this.loadStart}
-          style={{ flex: 1, width: screenWidth, height: 150 }}
-        />
+       <CustomVideoPlayer video={video} poster={poster}/>
       );
     }
   }
 
   async _getArticleContent(contentId) {
-    let content = await fetch(
+return fetch(
       "http://dataprovider.touch.baomoi.com/json/article.aspx?articleId=" +
         contentId
-    );
-    let response = await content.json();
-    return response.article.Body;
+    ).then((response) => response.json()).then((responseJson) => { return responseJson.article.Body; });
+
+  
   }
   state = { isLoading: true };
+
   componentDidMount() {
     this._getArticleContent(this.article.ContentID).then(content => {
       this.article.Content = content;
