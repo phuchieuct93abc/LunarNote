@@ -10,18 +10,14 @@ import {
   FlatList,
   Dimensions,Text,StyleSheet,TouchableOpacity
 } from "react-native";
-import VideoPlayer from "react-native-video-controls";
+import Video from 'react-native-video';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 export default class CustomVideoPlayer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loadVideo: false,loading:true };
-  }
-  _onPressButton(){
-     this.setState({loadVideo:true})
-    console.log(123)
+    this.state = { loadVideo: false,paused:false };
   }
 
   render() {
@@ -31,6 +27,11 @@ export default class CustomVideoPlayer extends React.Component {
     const height = 200;
 
     const styles = StyleSheet.create({
+      wrapper:{
+paddingTop:10,
+paddingBottom:10
+
+      },
       playButtonWrapper: {
         position:"absolute",
         top:40,
@@ -48,12 +49,16 @@ export default class CustomVideoPlayer extends React.Component {
     if (this.state.loadVideo) {
     
       return (
-        <VideoPlayer
-          source={{ uri: videoUrl }} // Can be a URL or a local file.
-          style={{ flex: 1, width: screenWidth, height: 150 }}
-        />
+        <View style={styles.wrapper}>
+         <TouchableOpacity onPress={()=>{this.setState({paused:!this.state.paused})}}>
+          <Video
+            source={{ uri: videoUrl }} paused={this.state.paused}// Can be a URL or a local file.
+            style={{ flex: 1, width: screenWidth, height: 150 }}
+          /></TouchableOpacity>
+          </View>
       );
-    } else {
+    } 
+
       return (
         <View style={{flex:1,alignItems:"center",width: screenWidth, height: 250}}>
             <Text>Video : {posterUrl}</Text>
@@ -62,7 +67,7 @@ export default class CustomVideoPlayer extends React.Component {
             source={{ uri: posterUrl }}
             style={{ width: screenWidth ,height:200}}
           />
-            <TouchableOpacity onPress={this._onPressButton.bind(this)} style={styles.playButtonWrapper}>
+            <TouchableOpacity onPress={()=>{this.setState({loadVideo:true})}} style={styles.playButtonWrapper}>
             <Icon name="rocket" size={30} color="#900"  style={{ alignItems:"center"}} />
 
 
@@ -71,6 +76,6 @@ export default class CustomVideoPlayer extends React.Component {
        
         )
       
-    }
+    
   }
 }
