@@ -24,13 +24,9 @@ export default class ViewItem extends React.Component {
     super(props);
     this.article = this.props.article;
     this.state = { article: this.article, viewSource: false };
-    this._loadStart = this._loadStart.bind(this);
   }
-  _onBackVideo() {}
-  _loadStart() {
-  }
+
   _renderNode(node, index, siblings, parent, defaultRenderer) {
-    const screenWidth = Dimensions.get("window").width - 10;
 
     if (node.name == "p" && node.attribs.class == "body-image") {
       let url = node.children[0].attribs.src;
@@ -40,15 +36,19 @@ export default class ViewItem extends React.Component {
           <Image
             key={index}
             source={{ uri: url }}
-            style={{ width: screenWidth, height: 150 }}
+            style={{ height:200 }}
           />
         </View>
       );
     } else if (node.name == "p" && node.attribs.class == "body-video") {
-      let video = node.children[0].children[0].attribs["data-src"];
-      let poster = node.children[0].attribs["poster"]
+      let video = node.children[0];
+      let source = video.children[0];
+      let videoUrl = source.attribs["data-src"];
+      let poster = video.attribs["poster"]
+      let width = video.attribs["data-width"] 
+        let height = video.attribs["data-height"]
       return (
-       <CustomVideoPlayer video={video} poster={poster}/>
+        <CustomVideoPlayer video={videoUrl} poster={poster} size={{width:width,height:height}}/>
       );
     }
   }
@@ -69,10 +69,6 @@ return fetch(
       this.setState({ article: this.article, isLoading: false });
     });
   }
-  /*  static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.article.SourceName}`
-  });
-*/
   render() {
     let videoUrl =
       "http://baomoi-video-tr.zadn.vn/b79e18d6708046802a5a49821ae35c4c/595860a9/streaming.baomoi.com/2017/07/01/255/22652235/4706329.mp4";
@@ -95,12 +91,12 @@ return fetch(
       content = <ActivityIndicator />;
     } else {
       content = (
-        <View>
+        <View style={{flex:1}}>
           <Text style={styles.description}>
             {this.state.article.Description}
           </Text>
-          <View>
-            <HTMLView
+          <View style={{flex:1}}>
+            <HTMLView style={{flex:1}}
               stylesheet={styles}
               value={this.state.article.Content}
               renderNode={this._renderNode}

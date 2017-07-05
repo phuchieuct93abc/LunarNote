@@ -10,8 +10,7 @@ import {
   FlatList,
   Dimensions
 } from "react-native";
-import { Card,Text } from 'react-native-elements';
-
+import { Card, Text } from "react-native-elements";
 
 export default class ListItem extends React.Component {
   constructor(props) {
@@ -24,35 +23,32 @@ export default class ListItem extends React.Component {
   render() {
     const screenWidth = Dimensions.get("window").width - 10;
     let imageUri = this.props.article.LandscapeAvatar;
-    let onSelected = this.props.onSelected
+    let onSelected = this.props.onSelected;
+    let background =
+      Platform.OS === "android"
+        ? TouchableNativeFeedback.SelectableBackground()
+        : "";
 
     if (imageUri == null || imageUri == "") {
       imageUri = "http://rscmireland.com/news/News.jpg";
     }
 
     return (
-      <Card containerStyle={{padding: 1}}>
+      <Card containerStyle={{ padding: 1,flex:1 }}>
         <TouchableNativeFeedback
           onPress={() => onSelected(this.props.index)}
-          background={
-            Platform.OS === "android"
-              ? TouchableNativeFeedback.SelectableBackground()
-              : ""
-          }
+          background={background}
         >
-          <View style={{ flex: 1, flexDirection: "column" ,height: 200}}>
+          <View style={{ flex: 1, flexDirection: "column", height: 200 }}>
             <Image
               source={{ uri: imageUri }}
-              style={{ flex: 1, width: screenWidth }}
+              style={{ flex: 1 }}
             />
-            <View style={{padding:5}}>
-                 <Text h4> 
-              {this.props.article.Title} {this.props.index}
-            </Text>
-
-
+            <View style={{ padding: 5 }}>
+              <Text h4>
+                {this.props.article.Title} {this.props.index}
+              </Text>
             </View>
-         
           </View>
         </TouchableNativeFeedback>
       </Card>

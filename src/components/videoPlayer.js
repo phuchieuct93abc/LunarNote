@@ -8,7 +8,7 @@ import {
   View,
   Button,
   FlatList,
-  Dimensions,Text,StyleSheet,TouchableOpacity
+  Dimensions,Text,StyleSheet,TouchableOpacity,Linking
 } from "react-native";
 import Video from 'react-native-video';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +18,10 @@ export default class CustomVideoPlayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = { loadVideo: false,paused:false };
+  }
+  _onPaused(){
+    this.setState({paused:!this.state.paused})
+   
   }
 
   render() {
@@ -29,7 +33,8 @@ export default class CustomVideoPlayer extends React.Component {
     const styles = StyleSheet.create({
       wrapper:{
 paddingTop:10,
-paddingBottom:10
+paddingBottom:10,
+flex:1
 
       },
       playButtonWrapper: {
@@ -50,11 +55,19 @@ paddingBottom:10
     
       return (
         <View style={styles.wrapper}>
-         <TouchableOpacity onPress={()=>{this.setState({paused:!this.state.paused})}}>
+         <TouchableOpacity onPress={this._onPaused.bind(this)} style={{flex:1}}> 
           <Video
+          ref={(ref) => {
+         this.player = ref
+       }}  
             source={{ uri: videoUrl }} paused={this.state.paused}// Can be a URL or a local file.
-            style={{ flex: 1, width: screenWidth, height: 150 }}
+            style={{ flex: 1,  height:150}}
           /></TouchableOpacity>
+          
+<Text style={{color: 'blue'}}
+      onPress={() => Linking.openURL(videoUrl)}>
+  Open Video
+</Text>
           </View>
       );
     } 
