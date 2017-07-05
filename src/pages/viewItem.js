@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import HTMLView from "react-native-htmlview";
 import CustomVideoPlayer from "../components/videoPlayer";
+import ParallaxView from "react-native-parallax-view";
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
   return target.replace(new RegExp(search, "g"), replacement);
@@ -27,39 +28,40 @@ export default class ViewItem extends React.Component {
   }
 
   _renderNode(node, index, siblings, parent, defaultRenderer) {
-
     if (node.name == "p" && node.attribs.class == "body-image") {
       let url = node.children[0].attribs.src;
 
       return (
         <View>
-          <Image
-            key={index}
-            source={{ uri: url }}
-            style={{ height:200 }}
-          />
+          <Image key={index} source={{ uri: url }} style={{ height: 200 }} />
         </View>
       );
     } else if (node.name == "p" && node.attribs.class == "body-video") {
       let video = node.children[0];
       let source = video.children[0];
       let videoUrl = source.attribs["data-src"];
-      let poster = video.attribs["poster"]
-      let width = video.attribs["data-width"] 
-        let height = video.attribs["data-height"]
+      let poster = video.attribs["poster"];
+      let width = video.attribs["data-width"];
+      let height = video.attribs["data-height"];
       return (
-        <CustomVideoPlayer video={videoUrl} poster={poster} size={{width:width,height:height}}/>
+        <CustomVideoPlayer
+          video={videoUrl}
+          poster={poster}
+          size={{ width: width, height: height }}
+        />
       );
     }
   }
 
   async _getArticleContent(contentId) {
-return fetch(
+    return fetch(
       "http://dataprovider.touch.baomoi.com/json/article.aspx?articleId=" +
         contentId
-    ).then((response) => response.json()).then((responseJson) => { return responseJson.article.Body; });
-
-  
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        return responseJson.article.Body;
+      });
   }
   state = { isLoading: true };
 
@@ -91,12 +93,13 @@ return fetch(
       content = <ActivityIndicator />;
     } else {
       content = (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <Text style={styles.description}>
             {this.state.article.Description}
           </Text>
-          <View style={{flex:1}}>
-            <HTMLView style={{flex:1}}
+          <View style={{ flex: 1 }}>
+            <HTMLView
+              style={{ flex: 1 }}
               stylesheet={styles}
               value={this.state.article.Content}
               renderNode={this._renderNode}
@@ -113,21 +116,42 @@ return fetch(
     }
 
     return (
-      <ScrollView style={styles.wrapper}>
-        <View style={{ flex: 1, padding: 10 }}>
-          <Text style={styles.title}>
+      <ParallaxView
+        backgroundSource={{uri:this.state.article.LandscapeAvatar}}
+        windowHeight={200}
+        header={<View style={{flex:1,justifyContent:"flex-end",alignItems:"flex-end",flexDirection:"row"}}>
+        <View style={{backgroundColor:'rgba(0,0,0,.6)',flex:1}}>
+            <Text style={styles.title}>
             {this.state.article.Title}
           </Text>
+        </View>
+
+         
+        </View>
+          
+        }
+     
+      >
+        <View style={{ flex: 1, padding: 10 }}>
+         
           {content}
         </View>
-      </ScrollView>
+      </ParallaxView>
+
+      /*
+      <ScrollView style={styles.wrapper}>
+       
+      </ScrollView>*/
     );
   }
 }
 const styles = StyleSheet.create({
   title: {
     fontSize: 30,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    color:"white",
+    paddingLeft:10,
+    paddingRight:5
   },
   description: {
     fontSize: 25,
