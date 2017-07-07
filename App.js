@@ -8,10 +8,6 @@ import { Button } from 'react-native-elements';
 import { StatusBar, AppRegistry,Text, View ,FlatList} from 'react-native';
 
 import {  StackNavigator} from 'react-navigation'; 
-const Color={
-  button:"#2096F3"
-}
-
 
 
 const Navigator = StackNavigator({

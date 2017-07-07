@@ -1,5 +1,7 @@
 import React from 'react';
-export  class HomeScreen extends React.Component {
+import {View,Text,Button} from 'react-native';
+
+export default  class HomeScreen extends React.Component {
   static navigationOptions = {
    title: 'Welcome',
  }; 
@@ -44,10 +46,7 @@ export  class HomeScreen extends React.Component {
 
     return (
       <View style={{flex:1}}>  
-         <StatusBar
-     backgroundColor="blue"
-     barStyle="light-content"  
-   />
+
           
           <View style={{flexDirection: 'column',flex:1,flexWrap: 'wrap'}}>
  
@@ -63,3 +62,7 @@ export  class HomeScreen extends React.Component {
     );
   }
 }
+const Color={
+  button:"#2096F3"
+}
+
