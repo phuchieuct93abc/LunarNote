@@ -14,7 +14,7 @@ import {
   ViewPagerAndroid,
   Alert
 } from "react-native";
-import ViewItem from "./viewItem";
+import ViewItem from "../components/viewItem";
 
 export default class ViewPager extends React.Component {
   constructor(props) {
