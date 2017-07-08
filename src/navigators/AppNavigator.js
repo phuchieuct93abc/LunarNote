@@ -11,7 +11,7 @@ import ViewPager from '../pages/viewPager'
 export const AppNavigator   = StackNavigator({
   Home: { screen: HomeScreen } ,//Default entry screen
   List: { screen: List }, //Default entry screen
-  ViewPager: { screen: ViewPager } //Default entry screen
+  ViewPager: { screen: ViewPager } //Default entry screen 
  
 });
 

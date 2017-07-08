@@ -10,14 +10,11 @@ import {
   FlatList
 } from "react-native";
 import ListItem from "../components/listItem";
-import { connect } from 'react-redux';
 
 
-class List extends React.Component {
-  
+export default const List = ({})=> {
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
       isLoading: true
     };
@@ -66,6 +63,9 @@ class List extends React.Component {
     });
   }
 
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.item.name}`
+  });
   _onSelectedArticle(index){
     this.props.navigation.navigate("ViewPager", { index: index,articleList:this.articles })
   }
@@ -102,26 +102,3 @@ class List extends React.Component {
     );
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    currentCategory:state.category.id,
-    isLoading:true
-  }
-
-};
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    fetchData:(id)=>{dispatch(fetchArticleList(id))}
-      
-    }
-    
-  }
-
-const ListScreen = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(List)
-
-
-export default ListScreen 
