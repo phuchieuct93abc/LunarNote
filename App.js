@@ -3,7 +3,6 @@ import List from './src/pages/list'
 import ViewPager from './src/pages/viewPager'
 import HomeScreen from './src/pages/home'
 
-
 import { Button } from 'react-native-elements';
 import { StatusBar, AppRegistry,Text, View ,FlatList} from 'react-native';
 

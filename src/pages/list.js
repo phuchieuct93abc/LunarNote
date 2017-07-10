@@ -10,70 +10,52 @@ import {
   FlatList
 } from "react-native";
 import ListItem from "../components/listItem";
-import { connect } from 'react-redux';
-
+import { connect } from "react-redux";
+import { fetchArticleList, loadMore, resetArticle } from "../actions";
 
 class List extends React.Component {
-  
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
       isLoading: true
     };
     currentIndex = 0;
-    this._firstLoad = this._firstLoad.bind(this);
-    this._onSelectedArticle = this._onSelectedArticle.bind(this)
+    this._onSelectedArticle = this._onSelectedArticle.bind(this);
   }
 
-  async _fetchData(from) {
-    let url =
-      "http://dataprovider.touch.baomoi.com/json/articlelist.aspx?start=${from}&count=10&listType=zone&listId=53&imageMinSize=300&mode=quickview";
-    url = url.replace("${from}", from);
-    let response = await fetch(url);
-    let responseJson = await response.json();
-    currentIndex = currentIndex + 10;
-    return responseJson.articlelist;
+ 
+  _loadArticleList() {
+    this.props.fetchData(this.props.currentCategory);
   }
   componentDidMount() {
-    this.setState({ isLoading: true });
-
-    this._firstLoad();
+    this._loadArticleList();
   }
   _onRefresh() {
-    this.setState({ isLoading: true });
-    this._firstLoad();
-  }
-  _firstLoad() {
-    this._fetchData(0).then(response => {
-      this.articles = response;
-      this.ds = new ListView.DataSource({
-        rowHasChanged: (r1, r2) => r1 !== r2
-      });
-      this.setState({
-        isLoading: false,
-        dataSource: this.ds.cloneWithRows(this.articles)
-      });
-    });
-  }
-  _getMore() {
-    console.log("get more", currentIndex);
-    this._fetchData(currentIndex).then(response => {
-      this.articles = this.articles.concat(response);
-      this.setState({
-        dataSource: this.ds.cloneWithRows(this.articles)
-      });
-    });
+    this.props.resetArticleList();
+    this._loadArticleList();
   }
 
-  _onSelectedArticle(index){
-    this.props.navigation.navigate("ViewPager", { index: index,articleList:this.articles })
+  _getMore() {
+      console.log("get more @@@@@@@@@@@@@@2")
+    if(this.props.articleList.length>0){
+          this.props.getMoreArticle();
+
+    }
+  }
+
+  _onSelectedArticle(index) {
+    this.props.navigation.navigate("ViewPager", {
+      index: index,
+      articleList: this.articles
+    });
   }
 
   render() {
     const { params } = this.props.navigation.state;
-
-    if (this.state.isLoading) {
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
+    if (this.props.articleList.length === 0) {
       return (
         <View style={{ flex: 1 }}>
           <ActivityIndicator />
@@ -83,19 +65,23 @@ class List extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
+      <Text>{this.props.currentIndex}</Text>
         <ListView
-          onEndReachedThreshold={2000}
           onEndReached={this._getMore.bind(this)}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.isLoading}
+              refreshing={this.props.isLoading}
               onRefresh={this._onRefresh.bind(this)}
             />
           }
-          dataSource={this.state.dataSource}
-          renderRow={(rowData,sex,index) => 
-            <View style={{ padding:1 }}>
-              <ListItem  article={rowData} onSelected={this._onSelectedArticle} index={index} />
+          dataSource={ds.cloneWithRows(this.props.articleList)}
+          renderRow={(rowData, sec, index) =>
+            <View style={{ padding: 1 }}>
+              <ListItem
+                article={rowData}
+                onSelected={this._onSelectedArticle}
+                index={index}
+              />
             </View>}
         />
       </View>
@@ -105,23 +91,26 @@ class List extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    currentCategory:state.category.id,
-    isLoading:true
-  }
-
+    currentCategory: state.category.id,
+    isLoading: false,
+    articleList: state.article,
+    currentIndex:state.values.currentIndex
+  };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchData:(id)=>{dispatch(fetchArticleList(id))}
-      
+    fetchData: id => {
+      dispatch(fetchArticleList(id));
+    },
+    getMoreArticle: id => {
+      dispatch(loadMore());
+    },
+    resetArticleList: () => {
+      dispatch(resetArticle());
     }
-    
-  }
+  };
+};
 
-const ListScreen = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(List)
+const ListScreen = connect(mapStateToProps, mapDispatchToProps)(List);
 
-
-export default ListScreen 
+export default ListScreen;

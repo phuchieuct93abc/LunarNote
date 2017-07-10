@@ -3,6 +3,7 @@ import { NavigationActions } from 'react-navigation';
 
 import { AppNavigator } from '../navigators/AppNavigator';
 import {article,category} from './article'
+import {values} from './values'
 // Start with two routes: The Main screen, with the Login screen on top.
 const firstAction = AppNavigator.router.getActionForPathAndParams('Home');
 const secondAction = AppNavigator.router.getActionForPathAndParams('List');
@@ -35,7 +36,8 @@ const AppReducer = combineReducers({
     AppNavigator.router.getStateForAction(action, state)
   ),
   article,
-  category
+  category,
+  values
 });
 
 export default AppReducer;
