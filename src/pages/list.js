@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import ListItem from "../components/listItem";
 import { connect } from "react-redux";
-import { fetchArticleList, loadMore, resetArticle } from "../actions";
+import { fetchArticleList, loadMore, resetArticle,selectArticle } from "../actions";
+import { NavigationActions } from "react-navigation";
 
 class List extends React.Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class List extends React.Component {
     this.state = {
       isLoading: true
     };
-    currentIndex = 0;
     this._onSelectedArticle = this._onSelectedArticle.bind(this);
   }
 
@@ -36,7 +36,7 @@ class List extends React.Component {
   }
 
   _getMore() {
-      console.log("get more @@@@@@@@@@@@@@2")
+    
     if(this.props.articleList.length>0){
           this.props.getMoreArticle();
 
@@ -44,10 +44,8 @@ class List extends React.Component {
   }
 
   _onSelectedArticle(index) {
-    this.props.navigation.navigate("ViewPager", {
-      index: index,
-      articleList: this.articles
-    });
+    this.props.selectArticle(index)
+
   }
 
   render() {
@@ -65,7 +63,6 @@ class List extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-      <Text>{this.props.currentIndex}</Text>
         <ListView
           onEndReached={this._getMore.bind(this)}
           refreshControl={
@@ -76,13 +73,12 @@ class List extends React.Component {
           }
           dataSource={ds.cloneWithRows(this.props.articleList)}
           renderRow={(rowData, sec, index) =>
-            <View style={{ padding: 1 }}>
               <ListItem
                 article={rowData}
                 onSelected={this._onSelectedArticle}
                 index={index}
               />
-            </View>}
+            }
         />
       </View>
     );
@@ -107,6 +103,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     resetArticleList: () => {
       dispatch(resetArticle());
+    },
+    selectArticle:(index)=>{
+      dispatch(selectArticle(index))
+           dispatch(NavigationActions.navigate({ routeName: "ViewPager" }));
+
     }
   };
 };

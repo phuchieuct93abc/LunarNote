@@ -1,4 +1,8 @@
-const getFakeDate = [...Array(10)].map((_, i) => i * 10);
+getRandomKey = ()=>{  return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+const getFakeDate = [...Array(10)].map((_, i) => ({isLoading:true,key:getRandomKey()}));
+console.log(getFakeDate)
 export const article = (state = [], action) => {
 
   switch (action.type) {
@@ -11,14 +15,13 @@ export const article = (state = [], action) => {
 
       
     case "NEW_ARTICLE_ARRIVE":
-
-      return [
-        ...state,...action.articleList 
-      ]
-      case "ADD_FAKE_DATE":
-          return [
-        ...state,...getFakeDate
-      ]
+   // var newList =state.map(article=>(article.isLoading?action.articleList.shift():action.articleList.shift()))
+   // return Array.from(new Set(newList))
+   return [...state,...action.articleList]
+    
+      case "ADD_FAKE_DATA":
+     // return [...state,...getFakeDate()]
+          return state
 
     default: return state;
   }

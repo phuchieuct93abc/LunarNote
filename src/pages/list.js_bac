@@ -54,7 +54,6 @@ export default const List = ({})=> {
     });
   }
   _getMore() {
-    console.log("get more", currentIndex);
     this._fetchData(currentIndex).then(response => {
       this.articles = this.articles.concat(response);
       this.setState({

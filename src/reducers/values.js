@@ -5,6 +5,8 @@ export const values = (state = {currentIndex:0}, action) => {
   	return {...state,currentIndex:state.currentIndex+10}
   	case "RESET_ARTICLE":
   	return {...state,currentIndex:0}
+  	case "SELECTED_ARTICLE_INDEX":
+  	return {...state,selectedArticleIndex:action.index}
   
     default: return state; 
   }

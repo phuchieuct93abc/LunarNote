@@ -15,36 +15,49 @@ import {
   Alert
 } from "react-native";
 import ViewItem from "../components/viewItem";
-
-export default class ViewPager extends React.Component {
+import { connect } from "react-redux";
+import { fetchArticleList, loadMore, resetArticle } from "../actions";
+ class ViewPager extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      index: parseInt(this.props.navigation.state.params.index)
-    };
+    this.state={
+      index:parseInt(this.props.selectedIndex)
+    }
+
   }
   _onPageSelected(event) {
-    this.setState({ index: parseInt(event.nativeEvent.position) });
+    var self = this;
+    var position  = event.nativeEvent.position 
+    setTimeout(function(){
+    if(position>=self.props.articleList.length-2){
+      self.props.getMoreArticle()
+    }
+    self.setState({ index: parseInt(position) });
+    },1000)
+   
   }
 
   render() {
-    this.articleList = this.props.navigation.state.params.articleList;
-
+    let articleList =  this.props.articleList;
+    console.log(articleList.length-1,articleList[articleList.length-1])
     if (this.state.index != null)
       return (
         <View style={{ flex: 1 }}>
+        <Text>{this.state.index} /{this.props.articleList.length}</Text>
           <ViewPagerAndroid
             style={{ flex: 1 }}
             initialPage={this.state.index}
             onPageSelected={this._onPageSelected.bind(this)}
           >
-            {this.articleList.map((item, mapIndex) => {
+            { 
+            articleList.map((item, mapIndex) => {
+  
               return (
-                <View key={item.ContentID}>
+                <View key={mapIndex}>
                   {mapIndex >= this.state.index - 1 &&
                   mapIndex <= this.state.index + 1
                     ? <ViewItem article={item} />
-                    : <Text>bbb</Text>}
+                    : <Text>Loading...</Text>}
                 </View>
               );
             })}
@@ -53,3 +66,24 @@ export default class ViewPager extends React.Component {
       );
   }
 }
+const mapStateToProps = state => {
+  return {
+       articleList: state.article,
+       selectedIndex:    state.values.selectedArticleIndex
+
+
+  };
+};
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+
+    getMoreArticle: id => {
+      dispatch(loadMore());
+    },
+  
+  };
+};
+
+const ViewPagerScreen = connect(mapStateToProps, mapDispatchToProps)(ViewPager);
+
+export default ViewPagerScreen;

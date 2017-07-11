@@ -15,7 +15,6 @@ function nav(state = initialNavState, action) {
   let nextState;
   switch (action.type) {
     case 'Navigation/NAVIGATE':
-    console.log("AAAAAAAAAAAa",action)
       break;
    
     default:
