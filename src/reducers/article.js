@@ -2,7 +2,6 @@ getRandomKey = ()=>{  return '_' + Math.random().toString(36).substr(2, 9);
 }
 
 const getFakeDate = [...Array(10)].map((_, i) => ({isLoading:true,key:getRandomKey()}));
-console.log(getFakeDate)
 export const article = (state = [], action) => {
 
   switch (action.type) {
