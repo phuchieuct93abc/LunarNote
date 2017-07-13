@@ -26,6 +26,11 @@ export default class ViewItem extends React.Component {
     this.article = this.props.article;
     this.state = { article: this.article, viewSource: false };
   }
+  componentWillUnmount(){
+    console.log(this.article.Title)
+
+
+  }
 
   _renderNode(node, index, siblings, parent, defaultRenderer) {
     if (node.name == "p" && node.attribs.class == "body-image") {
@@ -66,10 +71,16 @@ export default class ViewItem extends React.Component {
   state = { isLoading: true };
 
   componentDidMount() {
-    this._getArticleContent(this.article.ContentID).then(content => {
-      this.article.Content = content;
-      this.setState({ article: this.article, isLoading: false });
-    });
+    var self=this
+  /*  setTimeout(function(){
+
+        self._getArticleContent(self.article.ContentID).then(content => {
+          self.article.Content = content;
+          self.setState({ article: self.article, isLoading: false });
+        });
+
+    },1000)*/
+
   }
   render() {
     let videoUrl =

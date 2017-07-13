@@ -31,28 +31,6 @@ class ViewPagerArticle extends React.Component {
     };
   }
 
-  componentWillUpdate() {
-    /*    console.log(this.props.articleList.length)
-
-     this.setState({
-      articleList:this.props.articleList 
-    })*/
-  }
-  _onPageSelected(event) {}
-  componentDidUpdate() {
-    var position = this.state.index;
-    if (position >= this.props.articleList.length - 2) {
-      this.props.getMoreArticle();
-    }
-  }
-
-  _onMomentumScrollEnd(e, state, context) {
-    var position = state.index;
-    if (position >= this.props.articleList.length - 2) {
-      this.props.getMoreArticle();
-    }
-    this.setState({ index: parseInt(position) });
-  }
 
   _onChangePage(data) {
     this.props.selectArticle(data)
@@ -87,6 +65,7 @@ class ViewPagerArticle extends React.Component {
       <View style={{ flex: 1 }}>
       
         <ViewPager
+          initialPage={parseInt(this.props.selectedIndex)}
           dataSource={dataSource.cloneWithPages(this.props.articleList)}
           renderPage={this._renderPage.bind(this)}
           onChangePage={this._onChangePage.bind(this)}
