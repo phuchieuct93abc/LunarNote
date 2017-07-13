@@ -15,126 +15,107 @@ import {
   Alert,
   ListView
 } from "react-native";
-import Swiper from 'react-native-swiper';
-import ViewPager from 'react-native-viewpager'
+import Swiper from "react-native-swiper";
+import ViewPager from "react-native-viewpager";
 import ViewItem from "../components/viewItem";
 import { connect } from "react-redux";
-import { fetchArticleList, loadMore, resetArticle } from "../actions";
+import { fetchArticleList, loadMore, resetArticle ,selectArticle} from "../actions";
 
- class ViewPagerArticle extends React.Component {
+class ViewPagerArticle extends React.Component {
   constructor(props) {
     super(props);
 
-     this.state={
-      index:parseInt(this.props.selectedIndex),
-      articleList:this.props.articleList 
-    }
-
-
+    this.state = {
+      index: parseInt(this.props.selectedIndex),
+      articleList: this.props.articleList
+    };
   }
 
-
-
-
-  componentWillUpdate(){
-/*    console.log(this.props.articleList.length)
+  componentWillUpdate() {
+    /*    console.log(this.props.articleList.length)
 
      this.setState({
       articleList:this.props.articleList 
     })*/
   }
-  _onPageSelected(event) {
-    
-   
-  }
-  componentDidUpdate(){
-
-    var position  = this.state.index
-    if(position>=this.props.articleList.length-2){
-      this.props.getMoreArticle()
+  _onPageSelected(event) {}
+  componentDidUpdate() {
+    var position = this.state.index;
+    if (position >= this.props.articleList.length - 2) {
+      this.props.getMoreArticle();
     }
+  }
 
-  } 
-
-
-
- _onMomentumScrollEnd(e, state, context) {
-      var position  = state.index 
-    if(position>=this.props.articleList.length-2){
-      this.props.getMoreArticle()
+  _onMomentumScrollEnd(e, state, context) {
+    var position = state.index;
+    if (position >= this.props.articleList.length - 2) {
+      this.props.getMoreArticle();
     }
-       this.setState({ index: parseInt(position) });
-
+    this.setState({ index: parseInt(position) });
   }
-  /*getListView(){
-              console.log(this.props.articleList.length)
-            let views = this.props.articleList.map((item, mapIndex) => {
-              return (
-             
-              );
-            })
-            console.log(views.length)
-            return views
 
-  }*/
-  _onChangePage(data){
- if(data>=this.props.articleList.length-2){
-           this.props.getMoreArticle()
-
+  _onChangePage(data) {
+    this.props.selectArticle(data)
+    if (data >= this.props.articleList.length - 2) {
+      this.props.getMoreArticle();
+    }
   }
-}
 
-  _renderPage(item)  {
-    return (
-        <View key={item.ContentID} style={{flex:1}}>
-                    <ViewItem article={item} />
-                    
-                </View>
-    );
-  }
-  render()  {
-
-      let  dataSource = new ViewPager.DataSource({
-            pageHasChanged: (p1, p2) => p1 !== p2,
-          });
+  _renderPage(item,data) {
+    if(data < this.props.selectedIndex-1 || data > this.props.selectedIndex+1){
+      return (<View key={data} style={{ flex: 1 }}><Text>Loading</Text></View>)
+    }else{
 
       return (
-        <View style={{ flex: 1 }}>
-        <Text>{this.state.index} /{this.props.articleList.length}</Text>
-        <ViewPager
-
-        dataSource={dataSource.cloneWithPages(this.props.articleList)}
-        renderPage={this._renderPage}
-        onChangePage={this._onChangePage.bind(this)}
-
->
-          
-
-
-        </ViewPager>
-
+        <View key={data} style={{ flex: 1 }}>
+          <ViewItem article={item}  load={data==this.props.selectedIndex}/>
         </View>
       );
+
+    }
+
+
+
+ 
+  }
+  render() {
+    let dataSource = new ViewPager.DataSource({
+      pageHasChanged: (p1, p2) => p1.ContentID !== p2.ContentID
+    });
+
+    return (
+      <View style={{ flex: 1 }}>
+      
+        <ViewPager
+          dataSource={dataSource.cloneWithPages(this.props.articleList)}
+          renderPage={this._renderPage.bind(this)}
+          onChangePage={this._onChangePage.bind(this)}
+          renderPageIndicator={false}
+        />
+      </View>
+    );
   }
 }
 const mapStateToProps = state => {
   return {
-       articleList: state.article,
-       selectedIndex:    state.values.selectedArticleIndex
-
-
+    articleList: state.article,
+    selectedIndex: state.values.selectedArticleIndex
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-
     getMoreArticle: id => {
       dispatch(loadMore());
     },
-  
+     selectArticle:(index)=>{
+      dispatch(selectArticle(index))
+
+    }
   };
 };
 
-const ViewPagerScreen = connect(mapStateToProps, mapDispatchToProps)(ViewPagerArticle);
+const ViewPagerScreen = connect(mapStateToProps, mapDispatchToProps)(
+  ViewPagerArticle
+);
 
 export default ViewPagerScreen;

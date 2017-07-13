@@ -89,13 +89,14 @@ export default class ViewItem extends React.Component {
       );
     }
 
-    if (this.state.isLoading) {
-      content = <ActivityIndicator />;
+    if (this.state.isLoading || !this.props.load) {
+      content = <View style={{flex:1}}><ActivityIndicator /></View>; 
     } else {
       content = (
         <View style={{ flex: 1 }}>
           <Text style={styles.description}>
             {this.state.article.Description}
+          }
           </Text>
           <View style={{ flex: 1 }}>
             <HTMLView
