@@ -42,20 +42,39 @@ class ViewPagerArticle extends React.Component {
 
        this.props.selectArticle(position)
 
-      if (position == self.props.articleList.length - 1) {
+    setTimeout(function(){
+      if (position >= self.props.articleList.length - 2) {
         self.props.getMoreArticle();
       }
 
+    },1000) 
   }
 
-  
+  _renderPage(item, data) {
+    if (
+      data < this.props.selectedIndex - 1 ||
+      data > this.props.selectedIndex + 1
+    ) {
+      return (
+        <View key={data} style={{ flex: 1 }}>
+          <Text>Loading</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View key={data} style={{ flex: 1 }}>
+          <ViewItem article={item} load={data == this.props.selectedIndex} />
+        </View>
+      );
+    }
+  }
   render() {
 
 
     return (
       <View style={{ flex: 1 }}>
-     {/* <Text>{this.props.selectedIndex}</Text>
-      <Button title="load more" onPress={this.props.getMoreArticle}></Button>*/}
+      <Text>{this.props.selectedIndex}</Text>
+      <Button title="load more" onPress={this.props.getMoreArticle}></Button>
        <ViewPager
         initialPage={parseInt(this.props.selectedIndex)}
         onPageSelected={this._onChangePage.bind(this)}

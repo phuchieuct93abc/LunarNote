@@ -32,6 +32,7 @@
     "react-native-viewpager": "^0.2.13",
     "react-navigation": "^1.0.0-beta.11",
     "redux": "^3.7.1",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "rn-viewpager": "^1.2.3"
   }
 }
