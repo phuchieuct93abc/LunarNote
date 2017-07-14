@@ -14,7 +14,7 @@ export const fetchArticleList = id => {
 
 		return getArticleList(URL,start).then(json => {
 
-				dispatch(receiveNewArticleList(json.articlelist)); 
+				dispatch(receiveNewArticleList(json.articlelist));
 			});
 	};
 };
@@ -24,7 +24,7 @@ export const loadMore = () => {
 		dispatch({type:"FETCHING_DATA"});
 		dispatch(addFakeDate());
 		return getArticleList(URL,state().values.currentIndex).then(json => {
-				dispatch(receiveNewArticleList(json.articlelist)); 
+				dispatch(receiveNewArticleList(json.articlelist));
 			});
 	};
 };
@@ -55,3 +55,4 @@ export const addFakeDate = ()=>{
 export const selectArticle = (index)=>(
 	{type:"SELECTED_ARTICLE_INDEX",index}
 )
+export const openBottomSheet = (isOpen)=>({type:"OPEN_BOTTOM_SHEET",isOpen})

@@ -35,6 +35,9 @@ class ViewPagerArticle extends React.Component {
       articleList: this.props.articleList
     };
   }
+  static navigationOptions = ({ navigation }) => ({
+    title: `Chat with ${navigation.state.params.user}`,
+  });
 
   _onChangePage(data) {
     let self = this;
