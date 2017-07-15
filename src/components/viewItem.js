@@ -65,7 +65,6 @@ class ViewItem extends React.Component {
         return responseJson.article.Body;
       });
   }
-  state = { isLoading: true };
 
   componentDidMount() {
     this._getArticleContent(this.article.ContentID).then(content => {
@@ -73,8 +72,18 @@ class ViewItem extends React.Component {
       this.setState({ article: this.article, isLoading: false });
     });
   }
+  getFontSize(){
+    switch(this.props.fontSize){
+      case 1 :return SmallFont
+      case 2 :return MediumFont
+      case 3: retur :LargeFont
+
+    }
+
+  }
   render() {
     let styles = this.props.config.isNightMode?NightModeStyles:LightModeStyles
+    let fontSize =
     let videoUrl =
       "http://baomoi-video-tr.zadn.vn/b79e18d6708046802a5a49821ae35c4c/595860a9/streaming.baomoi.com/2017/07/01/255/22652235/4706329.mp4";
     var content;
@@ -119,7 +128,6 @@ class ViewItem extends React.Component {
         </View>
       );
     }
-
     return (
       <ParallaxView
         backgroundSource={{uri:this.state.article.LandscapeAvatar}}
@@ -150,7 +158,8 @@ class ViewItem extends React.Component {
 const mapStateToProps = state => {
   return {
     config:{
-      isNightMode: state.values.nightMode
+      isNightMode: state.values.nightMode,
+      fontSize:state.values.fontSize
 
     }
   };
@@ -163,7 +172,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const black = "#606060"
 const white = "#ffffff"
+const SmallFont = StyleSheet.create({
+  title:{
+    fontSize: 20,
 
+  }
+})
+const MediumFont = StyleSheet.create({
+})
+
+  const LargeFont = StyleSheet.create({
+})
 const CommonStyles = StyleSheet.create({
   flex:{
     flex: 1
@@ -204,6 +223,10 @@ const CommonStyles = StyleSheet.create({
   em: {
     fontWeight: "bold",
     fontSize: 20
+  },
+  ins:{
+    fontWeight: "bold",
+    fontSize: 20
   }
 
 
@@ -230,6 +253,11 @@ em: {
     color:white,
   fontWeight: "bold",
   fontSize: 20
+},
+ins:{
+  color:white,
+fontWeight: "bold",
+fontSize: 20
 }
 });
 

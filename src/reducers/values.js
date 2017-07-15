@@ -9,12 +9,13 @@ export const values = (state = {currentIndex:0}, action) => {
     case "OPEN_BOTTOM_SHEET":
     return {...state,isOpenBottomSheet:action.isOpen}
     case "CHANGE_BOTTOM_SHEET":{
-      console.log("open")
       return {...state,isOpenBottomSheet:!state.isOpenBottomSheet}
 
     }
     case "CHANGE_NIGHT_MODE":
     return {...state,nightMode:!state.nightMode}
+    case "CHANGE_FONT_SIZE":
+    return {...state,fontSize:action.fontSize}
     default: return state;
   }
 };

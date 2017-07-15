@@ -11,20 +11,7 @@ const initialNavState = AppNavigator.router.getStateForAction(
   firstAction
 );
 
-function nav(state = initialNavState, action) {
-  let nextState;
-  switch (action.type) {
-    case 'Navigation/NAVIGATE':
-      break;
 
-    default:
-      nextState = AppNavigator.router.getStateForAction(action, state);
-      break;
-  }
-
-  // Simply return the original `state` if `nextState` is null or undefined.
-  return nextState || state;
-}
 
 
 

@@ -11,11 +11,11 @@ import {
   Dimensions,
   StyleSheet,
   Slider,
-  Switch,Linking
+  Switch,Linking,Picker
 } from "react-native";
 import { Card, Text } from "react-native-elements";
 import { connect } from "react-redux";
-import {changeNightMode} from "../actions"
+import {changeNightMode,changeFontSize} from "../actions"
 class BottomSheet extends React.Component {
   constructor(props) {
     super(props);
@@ -31,16 +31,26 @@ class BottomSheet extends React.Component {
 
     return (
       <View style={[styles.flex,styles.wrapper]}>
-        <View style={styles.flexColumn}>
-          <Text>Font size</Text>
-          <Slider maximumValue={5} minimumValue={1} step={1} />
+        <View style={{height:20}}>
+          <View style={styles.flexColumn}>
+            <Text>Font size {this.props.fontSize}</Text>
+            <Slider value={this.props.fontSize} style={{width:150}} maximumValue={3} minimumValue={1} step={1} onValueChange={this.props.changeFontSize}/>
+
+          </View>
+
+        </View>
+        <View style={{height:20}}>
+          <View style={styles.flexColumn}>
+            <Text>Night mode</Text>
+            <Switch value={this.props.isNightMode} onValueChange={this.props.changeNightMode}/>
+          </View>
+
         </View>
 
-        <View style={styles.flexColumn}>
-          <Text>Night mode</Text>
-          <Switch value={this.props.isNightMode} onValueChange={this.props.changeNightMode}/>
-        </View>
-        <View>
+
+
+
+        <View style={{flex:1,justifyContent:"center"}}>
           <Button onPress={this.openSource.bind(this)} title="Open original source"></Button>
         </View>
 
@@ -53,18 +63,20 @@ const mapStateToProps = state => {
   let selectedArticle = state.article[state.values.selectedArticleIndex]
   return {
     isNightMode: state.values.nightMode,
-    selectedArticle:selectedArticle
+    selectedArticle:selectedArticle,
+    fontSize:parseInt(state.values.fontSize)
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-changeNightMode:(value)=>{
-  dispatch(changeNightMode())
-},
-openSource:()=>{
+  changeNightMode:(value)=>{
+    dispatch(changeNightMode())
+  },
+  changeFontSize:(value)=>{
+    dispatch(changeFontSize(value))
 
-  dispatch()
-}
+  }
+
   };
 };
 const BottomSheetScreen = connect(mapStateToProps, mapDispatchToProps)(BottomSheet);
