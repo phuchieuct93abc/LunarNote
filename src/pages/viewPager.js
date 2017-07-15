@@ -18,7 +18,7 @@ import {
 import Swiper from "react-native-swiper";
 import ViewItem from "../components/viewItem";
 import { connect } from "react-redux";
-import {openBottomSheet} from '../actions'
+import {openBottomSheet,changeBottomSheet} from '../actions'
 import {
   fetchArticleList,
   loadMore,
@@ -26,25 +26,19 @@ import {
   selectArticle
 } from "../actions";
 import Modal from 'react-native-modalbox';
+import BottomSheetScreen from '../components/bottomSheet'
 
 import { ViewPager } from "rn-viewpager";
 import {BottomSheetBehavior,CoordinatorLayout} from "react-native-bottom-sheet-behavior"
 //https://github.com/maxs15/react-native-modalbox
-var self;
 
 class ViewPagerArticle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.openSetting = this.openSetting.bind(this);
-    self = this;
-  }
-  openSetting(){
-    this.bottomSheet.setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
-  }
+
+
 
 static navigationOptions = ({ navigation }) => {
   this.onClickRightButton = ()=>{
-navigation.dispatch(openBottomSheet())
+        navigation.dispatch(changeBottomSheet())
 
 
   }
@@ -61,7 +55,11 @@ navigation.dispatch(openBottomSheet())
        this.props.selectArticle(position)
 
       if (position == self.props.articleList.length - 1) {
-        self.props.getMoreArticle();
+        setTimeout(function(){
+
+          self.props.getMoreArticle();
+
+        },1000)
       }
 
   }
@@ -73,8 +71,14 @@ navigation.dispatch(openBottomSheet())
     return (
 
         <View style={{ flex: 1 }}>
-          <Modal isOpen={this.props.isOpenBottomSheet} position="bottom" backdrop={false} style={{height:200}}>
-            <Text style={styles.text}>Basic modal</Text>
+          <Modal           key={this.props.articleList.length+"_modal"}
+ isOpen={this.props.isOpenBottomSheet}
+             position="bottom"
+              style={{height:200}}
+              backButtonClose={true}
+              onClosed={this.props.closeBottomSheet}
+            >
+            <BottomSheetScreen/>
           </Modal>
          <ViewPager
           initialPage={parseInt(this.props.selectedIndex)}
@@ -85,11 +89,11 @@ navigation.dispatch(openBottomSheet())
           >
                   {this.props.articleList.map((item, index) => {
               if(index<this.props.selectedIndex-1 || index > this.props.selectedIndex.length+1){
-                  return (<View  style={{ flex: 1 }} key={item.ContentID}><Text >Loading</Text></View>);
+                  return (<View  style={{ flex: 1 }} key={index}><Text >Loading</Text></View>);
 
               }
 
-              return (<View style={{ flex: 1,}} key={item.ContentID}>
+              return (<View style={{ flex: 1,}} key={index}>
                 <ViewItem style={{ flex: 1, backgroundColor: 'red' }} article={item}></ViewItem>
               </View>)
 
@@ -123,7 +127,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     selectArticle: index => {
       dispatch(selectArticle(index));
+    },
+    closeBottomSheet:()=>{
+      dispatch(openBottomSheet(false));
+
     }
+
   };
 };
 

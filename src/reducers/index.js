@@ -16,7 +16,7 @@ function nav(state = initialNavState, action) {
   switch (action.type) {
     case 'Navigation/NAVIGATE':
       break;
-   
+
     default:
       nextState = AppNavigator.router.getStateForAction(action, state);
       break;
@@ -28,7 +28,7 @@ function nav(state = initialNavState, action) {
 
 
 
- 
+
 
 const AppReducer = combineReducers({
   nav: (state, action) => (

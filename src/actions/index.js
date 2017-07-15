@@ -1,5 +1,5 @@
 const URL =
-	"http://dataprovider.touch.baomoi.com/json/articlelist.aspx?start=${start}&count=5&listType=zone&listId=53&imageMinSize=300&mode=quickview";
+	"http://dataprovider.touch.baomoi.com/json/articlelist.aspx?start=${start}&count=10&listType=zone&listId=53&imageMinSize=300&mode=quickview";
 getArticleList = (url,start)=>{
 	return fetch(URL.replace("${start}",start)).then(success => success.json(), error => {})
 
@@ -56,3 +56,6 @@ export const selectArticle = (index)=>(
 	{type:"SELECTED_ARTICLE_INDEX",index}
 )
 export const openBottomSheet = (isOpen)=>({type:"OPEN_BOTTOM_SHEET",isOpen})
+export const changeBottomSheet = ()=>({type:"CHANGE_BOTTOM_SHEET"})
+export const changeNightMode=()=>({type:"CHANGE_NIGHT_MODE"})
+export const openSource=()=>({type:"OPEN_SOURCE"})

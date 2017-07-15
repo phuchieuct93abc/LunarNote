@@ -11,16 +11,18 @@ import {
   Button,
   FlatList,
   Dimensions,
-  ScrollView
+  ScrollView,Linking
 } from "react-native";
 import HTMLView from "react-native-htmlview";
 import CustomVideoPlayer from "../components/videoPlayer";
 import ParallaxView from "react-native-parallax-view";
+import { connect } from "react-redux";
+
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
   return target.replace(new RegExp(search, "g"), replacement);
 };
-export default class ViewItem extends React.Component {
+class ViewItem extends React.Component {
   constructor(props) {
     super(props);
     this.article = this.props.article;
@@ -65,13 +67,14 @@ export default class ViewItem extends React.Component {
   }
   state = { isLoading: true };
 
-  componentDidMount() { 
+  componentDidMount() {
     this._getArticleContent(this.article.ContentID).then(content => {
       this.article.Content = content;
       this.setState({ article: this.article, isLoading: false });
     });
   }
   render() {
+    let styles = this.props.config.isNightMode?NightModeStyles:LightModeStyles
     let videoUrl =
       "http://baomoi-video-tr.zadn.vn/b79e18d6708046802a5a49821ae35c4c/595860a9/streaming.baomoi.com/2017/07/01/255/22652235/4706329.mp4";
     var content;
@@ -90,18 +93,19 @@ export default class ViewItem extends React.Component {
     }
 
     if (this.state.isLoading ) {
-      content = <View style={{flex:1}}><ActivityIndicator /></View>; 
+      content = <View style={{flex:1}}><ActivityIndicator /></View>;
     } else {
       content = (
-        <View style={{ flex: 1 }}>
-          <Text style={styles.description}>
+        <View style={{flex:1,padding:10}}>
+          <Text style={[CommonStyles.description,styles.textColor]}>
             {this.state.article.Description}
-          }
+
           </Text>
-          <View style={{ flex: 1 }}>
+          <View style={CommonStyles.wrapper}>
             <HTMLView
-              style={{ flex: 1 }}
-              stylesheet={styles}
+              key={JSON.stringify(this.props.config)+"_"+this.state.article.ContentID}
+              style={CommonStyles.flex}
+              stylesheet={{...CommonStyles,...styles}}
               value={this.state.article.Content}
               renderNode={this._renderNode}
             />
@@ -122,42 +126,62 @@ export default class ViewItem extends React.Component {
         windowHeight={200}
         header={<View style={{flex:1,justifyContent:"flex-end",alignItems:"flex-end",flexDirection:"row"}}>
         <View style={{backgroundColor:'rgba(0,0,0,.6)',flex:1}}>
-            <Text style={styles.title}>
+            <Text style={CommonStyles.title}>
             {this.state.article.Title}
           </Text>
         </View>
 
-         
+
         </View>
-          
+
         }
-     
+
       >
-        <View style={{ flex: 1, padding: 10 }}>
-         
+        <View style={[CommonStyles.wrapper,styles.wrapper]}>
+
           {content}
         </View>
       </ParallaxView>
 
-      /*
-      <ScrollView style={styles.wrapper}>
-       
-      </ScrollView>*/
+
     );
   }
 }
-const styles = StyleSheet.create({
+const mapStateToProps = state => {
+  return {
+    config:{
+      isNightMode: state.values.nightMode
+
+    }
+  };
+};
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+
+  };
+};
+
+const black = "#606060"
+const white = "#ffffff"
+
+const CommonStyles = StyleSheet.create({
+  flex:{
+    flex: 1
+  },
+  wrapper:{
+    flex: 1,
+  },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     color:"white",
     paddingLeft:10,
-    paddingRight:5
+    paddingRight:5,
   },
   description: {
     fontSize: 25,
     marginBottom: 5,
-    fontStyle: "italic"
+    fontStyle: "italic",
   },
   p: {
     fontSize: 20,
@@ -181,4 +205,42 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20
   }
+
+
+})
+const NightModeStyles = StyleSheet.create({
+wrapper:{
+  backgroundColor:black,
+
+},
+textColor:{
+  color:white
+},
+p:{
+  color:"white",
+  fontSize: 20,
+  paddingLeft: 20
+},
+strong: {
+    color:white,
+  fontWeight: "bold",
+  fontSize: 20
+},
+em: {
+    color:white,
+  fontWeight: "bold",
+  fontSize: 20
+}
 });
+
+const LightModeStyles = StyleSheet.create({
+  wrapper:{
+
+  },
+  textColor:{
+  }
+
+});
+ViewItem = connect(mapStateToProps, mapDispatchToProps)(ViewItem);
+
+export default ViewItem;
