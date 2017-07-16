@@ -30,22 +30,34 @@ class BottomSheet extends React.Component {
   render() {
 
     return (
-      <View style={[styles.flex,styles.wrapper]}>
-        <View style={{height:20}}>
-          <View style={styles.flexColumn}>
-            <Text>Font size {this.props.fontSize}</Text>
-            <Slider value={this.props.fontSize} style={{width:150}} maximumValue={3} minimumValue={1} step={1} onValueChange={this.props.changeFontSize}/>
+      <View style={[styles.flex,styles.wrapper,{flexDirection:"column"}]}>
+        <View style={{flex:1,flexDirection:"row"}}>
+
+          <View style={[styles.flex]}>
+            <View style={[styles.flexColumn,,{alignItems:"center",justifyContent:"flex-start"}]}>
+              <Text style={{flex:0}}>Font size:</Text>
+
+              <Picker style={styles.flex}
+                selectedValue={this.props.fontSize}
+                onValueChange={this.props.changeFontSize}
+                >
+                <Picker.Item label="Small" value={1} />
+                <Picker.Item label="Medium" value={2}/>
+                <Picker.Item label="Large" value={3}/>
+              </Picker>
+            </View>
+
+          </View>
+          <View style={styles.flex}>
+            <View style={[styles.flexColumn,,{alignItems:"center",justifyContent:"flex-start"}]}>
+              <Text style={{flex:0}}>Night mode:</Text>
+              <Switch  value={this.props.isNightMode} onValueChange={this.props.changeNightMode}/>
+            </View>
 
           </View>
 
         </View>
-        <View style={{height:20}}>
-          <View style={styles.flexColumn}>
-            <Text>Night mode</Text>
-            <Switch value={this.props.isNightMode} onValueChange={this.props.changeNightMode}/>
-          </View>
 
-        </View>
 
 
 

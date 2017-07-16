@@ -74,7 +74,7 @@ static navigationOptions = ({ navigation }) => {
           <Modal   key={this.props.articleList.length+"_modal"}
               isOpen={this.props.isOpenBottomSheet}
              position="bottom"
-              style={{height:100}}
+              style={{height:120}}
               backButtonClose={true}
               onClosed={this.props.closeBottomSheet}
             >
