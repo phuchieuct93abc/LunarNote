@@ -11,42 +11,58 @@ import {
 } from "react-native";
 import ListItem from "../components/listItem";
 import { connect } from "react-redux";
-import { fetchArticleList, loadMore, resetArticle,selectArticle } from "../actions";
+import { fetchArticleList, loadMore, resetArticle,selectArticle,disableAllowToScrollToItem } from "../actions";
 import { NavigationActions } from "react-navigation";
 
 class List extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: true
-    };
+    this.props.disableAllowToScrollToItem()
+
     this._onSelectedArticle = this._onSelectedArticle.bind(this);
   }
 
- 
+
   _loadArticleList() {
     this.props.fetchData(this.props.currentCategory);
   }
   componentDidMount() {
     this._loadArticleList();
+    if(this.props.allowToScrollToItem){
+      this.flatListRef.scrollToIndex({animated: true, index: "" + this.props.selectedArticleIndex});
+      this.props.disableAllowToScrollToItem()
+    }
   }
   _onRefresh() {
     this.props.resetArticleList();
     this._loadArticleList();
   }
 
-  _getMore() {
-    
-    if(this.props.articleList.length>0){
-          this.props.getMoreArticle();
+  _getMore(info) {
+    console.log(info)
+    var self=this;
 
-    }
+      if(self.props.articleList.length>0 && !self.props.isFetchingData && info.distanceFromEnd>=0){
+            console.log("@@@@@@@@@@@@@@@@@@")
+            self.props.getMoreArticle();
+
+      }
+
   }
 
   _onSelectedArticle(index) {
     this.props.selectArticle(index)
 
   }
+  componentDidUpdate() {
+    if(this.props.allowToScrollToItem){
+      this.flatListRef.scrollToIndex({animated: true, index: "" + this.props.selectedArticleIndex});
+      this.props.disableAllowToScrollToItem()
+    }
+  }
+
+
+
 
   render() {
     const { params } = this.props.navigation.state;
@@ -63,7 +79,8 @@ class List extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <ListView
+        <Text>{this.props.articleList.length}</Text>
+        <FlatList
           onEndReached={this._getMore.bind(this)}
           refreshControl={
             <RefreshControl
@@ -71,12 +88,15 @@ class List extends React.Component {
               onRefresh={this._onRefresh.bind(this)}
             />
           }
-          dataSource={ds.cloneWithRows(this.props.articleList)}
-          renderRow={(rowData, sec, index) =>
+          data={this.props.articleList}
+          keyExtractor={(item,index)=>index}
+          ref={(ref) => { this.flatListRef = ref; }}
+
+          renderItem={(item) =>
               <ListItem
-                article={rowData}
+                article={item.item}
                 onSelected={this._onSelectedArticle}
-                index={index}
+                index={item.index}
               />
             }
         />
@@ -90,7 +110,10 @@ const mapStateToProps = state => {
     currentCategory: state.category.id,
     isLoading: false,
     articleList: state.article,
-    currentIndex:state.values.currentIndex
+    currentIndex:state.values.currentIndex,
+    selectedArticleIndex:state.values.selectedArticleIndex,
+    allowToScrollToItem:state.values.allowToScrollToItem,
+    isFetchingData:state.values.isFetchingData
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -107,6 +130,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     selectArticle:(index)=>{
       dispatch(selectArticle(index))
            dispatch(NavigationActions.navigate({ routeName: "ViewPager" }));
+
+    },
+    disableAllowToScrollToItem:()=>{
+      dispatch(disableAllowToScrollToItem())
 
     }
   };

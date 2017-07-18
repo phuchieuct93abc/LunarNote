@@ -10,18 +10,19 @@ import ViewPager from '../pages/viewPager'
 export const AppNavigator   = StackNavigator({
   Home: { screen: HomeScreen } ,//Default entry screen
   List: { screen: List }, //Default entry screen
-  ViewPager: { screen: ViewPager } //Default entry screen 
- 
+  ViewPager: { screen: ViewPager } //Default entry screen
+
 });
 
-const AppWithNavigationState = ({ dispatch, nav }) => (
-  <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
+const AppWithNavigationState = ({ dispatch, nav,state }) => (
+  <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav,reduxState: state })} />
 );
 
 
 
 const mapStateToProps = state => ({
   nav: state.nav,
+  state:state
 });
 
 export default connect(mapStateToProps)(AppWithNavigationState);

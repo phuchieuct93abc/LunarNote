@@ -1,9 +1,8 @@
-getRandomKey = ()=>{  return '_' + Math.random().toString(36).substr(2, 9);
-}
 
-const getFakeDate = [...Array(10)].map((_, i) => ({isLoading:true,key:getRandomKey()}));
+
+const fakeData = [...Array(10)].map((_, i) => ({isLoading:true,key:i+"_fake"}));
 export const article = (state = [], action) => {
-
+console.log(action.type)
   switch (action.type) {
     case "FETCH_ARTICLE_LIST":
       return [];
@@ -12,15 +11,15 @@ export const article = (state = [], action) => {
       return [];
       break;
 
-      
+
     case "NEW_ARTICLE_ARRIVE":
-   // var newList =state.map(article=>(article.isLoading?action.articleList.shift():action.articleList.shift()))
-   // return Array.from(new Set(newList))
-   return [...state,...action.articleList]
-    
+  var newList = state.map(article=>(article.isLoading?action.articleList.shift():article))
+    return newList
+  // return [...state,...action.articleList]
+
       case "ADD_FAKE_DATA":
-     // return [...state,...getFakeDate()]
-          return state
+      return [...state,...fakeData]
+    //      return state
 
     default: return state;
   }
@@ -30,8 +29,7 @@ export const category = (state = {}, action) => {
     case "SELECT_CATEGORY":
       return {...state,id:action.id};
 
-  
+
     default: return state;
   }
 };
-  

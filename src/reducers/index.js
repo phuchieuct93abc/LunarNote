@@ -10,7 +10,9 @@ const secondAction = AppNavigator.router.getActionForPathAndParams('List');
 const initialNavState = AppNavigator.router.getStateForAction(
   firstAction
 );
-
+const nav=(state, action) => (
+  AppNavigator.router.getStateForAction(action, state)
+)
 
 
 
@@ -18,9 +20,7 @@ const initialNavState = AppNavigator.router.getStateForAction(
 
 
 const AppReducer = combineReducers({
-  nav: (state, action) => (
-    AppNavigator.router.getStateForAction(action, state)
-  ),
+  nav: nav,
   article,
   category,
   values

@@ -15,12 +15,7 @@ import { Card, Text } from "react-native-elements";
 import Shimmer from 'react-native-shimmer';
 
 export default class ListItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      finish: false
-    };
-  }
+
 
   render() {
     const loadingText = <Shimmer duration={2000} style={styles.flex}><Text  style={styles.loadingText}>Loading...</Text></Shimmer>
@@ -41,7 +36,7 @@ export default class ListItem extends React.Component {
               source={{ uri: imageUri }}
               style={{ flex: 1 }}
             />
-    
+
     return (
       <Card containerStyle={styles.container}>
         <TouchableNativeFeedback
@@ -64,7 +59,7 @@ export default class ListItem extends React.Component {
  const styles = StyleSheet.create({
       flex: {
         flex:1
-      
+
       },
       container:{
         flex:1,
