@@ -47,7 +47,7 @@ export default class ListItem extends React.Component {
             {imagePlaceHolder}
             <View style={{ padding: 5 }}>
               <Text h4>
-                {this.props.article.Title} {isLoading}
+                {this.props.article.Title}
               </Text>
             </View>
           </View>

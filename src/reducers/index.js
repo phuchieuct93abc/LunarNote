@@ -9,15 +9,13 @@ const firstAction = AppNavigator.router.getActionForPathAndParams("Home");
 const secondAction = AppNavigator.router.getActionForPathAndParams("List");
 const initialNavState = AppNavigator.router.getStateForAction(firstAction);
 const nav = (state, action) => {
-	switch(action.type){
-		case "GO_BACK":{
-			console.log(state)
+	switch (action.type) {
+		case "GO_BACK": {
 			return AppNavigator.router.getStateForAction(
-        NavigationActions.back(),
-        state
-      );
+				NavigationActions.back(),
+				state
+			);
 		}
-
 	}
 	return AppNavigator.router.getStateForAction(action, state);
 };

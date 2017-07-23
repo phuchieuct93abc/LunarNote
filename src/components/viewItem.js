@@ -33,6 +33,7 @@ import {
 import {PullView} from 'react-native-pull';
 import {goBack} from '../actions'
 import {Title} from './title'
+import ArticleDetail from './articleDetail'
 
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
@@ -96,12 +97,13 @@ class ViewItem extends React.Component {
     });
   }
   getFontSize() {
+    console.log(this.props.config.fontSize)
     switch (this.props.config.fontSize) {
-      case 1:
+      case 0:
         return SmallFont;
-      case 2:
+      case 1:
         return MediumFont;
-      case 3:
+      case 2:
         return LargeFont;
       default:
         return MediumFont;
@@ -197,6 +199,7 @@ class ViewItem extends React.Component {
 
         >
           <View style={style.wrapper}>
+          <ArticleDetail article={this.props.article} />
             {content}
           </View>
         </ParallaxView>

@@ -1,5 +1,4 @@
 export const values = (state = {currentIndex:0}, action) => {
-  console.log(action.type)
   switch (action.type) {
     case "FETCHING_DATA":
     return {...state,isFetchingData:true}
@@ -13,8 +12,6 @@ export const values = (state = {currentIndex:0}, action) => {
     return {...state,isOpenBottomSheet:action.isOpen}
     case "CHANGE_BOTTOM_SHEET":
       return {...state,isOpenBottomSheet:!state.isOpenBottomSheet}
-
-
     case "CHANGE_NIGHT_MODE":
     return {...state,nightMode:!state.nightMode}
     case "CHANGE_FONT_SIZE":

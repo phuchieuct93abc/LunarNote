@@ -3,6 +3,7 @@ package com.reactnative;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cl.json.RNSharePackage;
 import com.bottomsheetbehavior.BottomSheetBehaviorPackage;
 import com.oblador.shimmer.RNShimmerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSharePackage(),
             new BottomSheetBehaviorPackage(),
             new RNShimmerPackage(),
             new VectorIconsPackage(),
