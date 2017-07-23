@@ -2,7 +2,6 @@
 
 const fakeData = [...Array(10)].map((_, i) => ({isLoading:true,key:i+"_fake"}));
 export const article = (state = [], action) => {
-console.log(action.type)
   switch (action.type) {
     case "FETCH_ARTICLE_LIST":
       return [];

@@ -1,4 +1,5 @@
 export const values = (state = {currentIndex:0}, action) => {
+  console.log(action.type)
   switch (action.type) {
     case "FETCHING_DATA":
     return {...state,isFetchingData:true}
@@ -19,6 +20,7 @@ export const values = (state = {currentIndex:0}, action) => {
     case "CHANGE_FONT_SIZE":
     return {...state,fontSize:action.fontSize}
     case "Navigation/BACK":
+    case "GO_BACK":
     return {...state,allowToScrollToItem:true}
     case "DISABLE_SCROLL":
     return {...state,allowToScrollToItem:false}

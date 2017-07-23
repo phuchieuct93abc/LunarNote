@@ -13,7 +13,7 @@ class App extends React.Component {
 
 	render() {
 			let store = createStore(AppReducer, compose(applyMiddleware(thunk),  autoRehydrate()));
-			persistStore(store, {blacklist:['nav'],storage: AsyncStorage})
+			persistStore(store, {blacklist:['nav',"allowToScrollToItem"],storage: AsyncStorage})
 
 		return (
 			<Provider store={store}>

@@ -48,12 +48,9 @@ class ViewPagerArticle extends React.Component {
   };
 componentWillUpdate(nextProp){
   if(this.props.values != nextProp.values){
-    console.log('start')
     this.props.navigation.setParams({}); //Update header title
   }
-//onsole.log("start")
-  // this.props.navigation.setParams({}); //Update header title
-  //console.log("end")
+
 
 }
   _onChangePage(data) {
@@ -67,6 +64,10 @@ componentWillUpdate(nextProp){
         self.props.getMoreArticle();
       }, 500);
     }
+  }
+  onBack(){
+
+    this.props.navigation.goBack()
   }
 
   render() {
@@ -89,6 +90,7 @@ componentWillUpdate(nextProp){
           onPageSelected={this._onChangePage.bind(this)}
           style={{ flex: 1 }}
           key={this.props.articleList.length}
+          onBack={this.onBack.bind(this)}
         >
           {this.props.articleList.map((item, index) => {
             if (

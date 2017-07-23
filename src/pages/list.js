@@ -17,15 +17,15 @@ import { NavigationActions } from "react-navigation";
 class List extends React.Component {
   constructor(props) {
     super(props);
-    this.props.disableAllowToScrollToItem()
-
     this._onSelectedArticle = this._onSelectedArticle.bind(this);
+
   }
 
 
   _loadArticleList() {
     this.props.fetchData(this.props.currentCategory);
   }
+
   componentDidMount() {
     this._loadArticleList();
     if(this.props.allowToScrollToItem){
@@ -33,17 +33,16 @@ class List extends React.Component {
       this.props.disableAllowToScrollToItem()
     }
   }
+
   _onRefresh() {
     this.props.resetArticleList();
     this._loadArticleList();
   }
 
   _getMore(info) {
-    console.log(info)
     var self=this;
 
       if(self.props.articleList.length>0 && !self.props.isFetchingData && info.distanceFromEnd>=0){
-            console.log("@@@@@@@@@@@@@@@@@@")
             self.props.getMoreArticle();
 
       }
@@ -66,9 +65,7 @@ class List extends React.Component {
 
   render() {
     const { params } = this.props.navigation.state;
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
+
     if (this.props.articleList.length === 0) {
       return (
         <View style={{ flex: 1 }}>

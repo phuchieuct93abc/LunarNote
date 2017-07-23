@@ -12,13 +12,27 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
-  Linking
+  Linking,
+  RefreshControl,
+  Animated
 } from "react-native";
 import HTMLView from "react-native-htmlview";
 import CustomVideoPlayer from "../components/videoPlayer";
 import ParallaxView from "react-native-parallax-view";
 import { connect } from "react-redux";
 import { merge } from "../enums";
+import {
+  CommonStyles,
+  SmallFont,
+  MediumFont,
+  LargeFont,
+  NightModeStyles,
+  LightModeStyles,
+  scrollViewStyles
+} from "./style.js";
+import {PullView} from 'react-native-pull';
+import {goBack} from '../actions'
+import {Title} from './title'
 
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
@@ -28,7 +42,12 @@ class ViewItem extends React.Component {
   constructor(props) {
     super(props);
     this.article = this.props.article;
-    this.state = { article: this.article, viewSource: false };
+    this.state = {
+      article: this.article,
+      viewSource: false,
+      scrollY: new Animated.Value(0),
+      refreshing: false
+    };
     this.getFontSize = this.getFontSize.bind(this);
     this.getStyle = this.getStyle.bind(this);
   }
@@ -84,7 +103,8 @@ class ViewItem extends React.Component {
         return MediumFont;
       case 3:
         return LargeFont;
-      default: return MediumFont;
+      default:
+        return MediumFont;
     }
   }
   getStyle() {
@@ -93,17 +113,31 @@ class ViewItem extends React.Component {
     let nightModeStyle = this.props.config.isNightMode
       ? NightModeStyles
       : LightModeStyles;
-      return merge(merge(baseStype,fontSizeStyle),nightModeStyle)
-
+    return merge(merge(baseStype, fontSizeStyle), nightModeStyle);
   }
 
-  render() {
+    onPullRelease(resolve) {
+    //do something
+        this.props.goBack()
+           setTimeout(resolve,500) 
+       
+    }
 
+  render() {
     let style = this.getStyle();
     let videoUrl =
       "http://baomoi-video-tr.zadn.vn/b79e18d6708046802a5a49821ae35c4c/595860a9/streaming.baomoi.com/2017/07/01/255/22652235/4706329.mp4";
     var content;
     var source;
+    const event = Animated.event([
+      {
+        nativeEvent: {
+          contentOffset: {
+            y: this.state.scrollY
+          }
+        }
+      }
+    ]);
     if (this.state.viewSource) {
       source = (
         <View>
@@ -152,30 +186,21 @@ class ViewItem extends React.Component {
       );
     }
     return (
-      <ParallaxView
-        backgroundSource={{ uri: this.state.article.LandscapeAvatar }}
-        windowHeight={200}
-        header={
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
-              flexDirection: "row"
-            }}
-          >
-            <View style={{ backgroundColor: "rgba(0,0,0,.6)", flex: 1 }}>
-              <Text style={CommonStyles.title}>
-                {this.state.article.Title} {this.props.fontSize}
-              </Text>
-            </View>
+      <PullView  onPullRelease={this.onPullRelease.bind(this)}>
+        <ParallaxView
+          backgroundSource={{ uri: this.state.article.LandscapeAvatar }}
+          windowHeight={200}
+          header={
+            <Title title={this.state.article.Title}/>
+          
+          }
+
+        >
+          <View style={style.wrapper}>
+            {content}
           </View>
-        }
-      >
-        <View style={style.wrapper}>
-          {content}
-        </View>
-      </ParallaxView>
+        </ParallaxView>
+      </PullView>
     );
   }
 }
@@ -188,133 +213,14 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
-  return {};
-};
-const smallFontSize=10
-const mediumFontSize=20
-const largeFontSize=30
-const black = "#606060";
-const white = "#ffffff";
-const SmallFont = {
-  description:{
-      fontSize: smallFontSize
-  },
-  p: {
-    fontSize: smallFontSize
-  },
-  strong:{
-    fontSize: smallFontSize
-  },
-  em:{
-    fontSize: smallFontSize
-  }
-};
-const MediumFont = {
-  description:{
-      fontSize: mediumFontSize
-  },
-  p: {
-    fontSize: mediumFontSize
-  },
-  strong:{
-    fontSize: mediumFontSize
-  },
-  em:{
-    fontSize: mediumFontSize
-  }
+  return {
+    goBack:()=>{
+      dispatch(goBack())
+
+    }
+  };
 };
 
-const LargeFont = {
-  description:{
-      fontSize: largeFontSize
-  },
-  p: {
-    fontSize: largeFontSize
-  },
-  strong:{
-    fontSize: largeFontSize
-  },
-  em:{
-    fontSize: largeFontSize
-  }
-
-};
-const CommonStyles = {
-  flex: {
-    flex: 1
-  },
-  wrapper: {
-    flex: 1
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "white",
-    paddingLeft: 10,
-    paddingRight: 5
-  },
-  description: {
-    fontSize: 25,
-    marginBottom: 5,
-    fontStyle: "italic"
-  },
-  p: {
-    fontSize: 20,
-    paddingLeft: 20
-  },
-  wrapper: {
-    flex: 1
-  },
-  backgroundVideo: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0
-  },
-  strong: {
-    fontWeight: "bold",
-    fontSize: 20
-  },
-  em: {
-    fontWeight: "bold",
-    fontSize: 20
-  },
-  ins: {
-    fontWeight: "bold",
-    fontSize: 20
-  }
-};
-const NightModeStyles = {
-  wrapper: {
-    backgroundColor: black
-  },
-  textColor: {
-    color: white
-  },
-  description:{
-    color: white
-
-  },
-  p: {
-    color: "white",
-
-  },
-  strong: {
-    color: white,
-
-  },
-  em: {
-    color: white,
-
-  },
-  ins: {
-    color: white,
-
-  }
-};
-
-const LightModeStyles = {};
 ViewItem = connect(mapStateToProps, mapDispatchToProps)(ViewItem);
 
 export default ViewItem;
