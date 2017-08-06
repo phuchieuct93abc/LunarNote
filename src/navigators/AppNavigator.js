@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addNavigationHelpers, StackNavigator } from 'react-navigation';
+import { addNavigationHelpers, TabNavigator } from 'react-navigation';
 
 import HomeScreen from '../pages/home'
 import List from '../pages/list'
-import ViewPager from '../pages/viewPager'
 
-export const AppNavigator   = StackNavigator({
+export const AppNavigator   = TabNavigator({
   Home: { screen: HomeScreen } ,//Default entry screen
   List: { screen: List }, //Default entry screen
-  ViewPager: { screen: ViewPager } //Default entry screen
-
 });
 
 const AppWithNavigationState = ({ dispatch, nav,state }) => (

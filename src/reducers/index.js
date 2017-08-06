@@ -7,7 +7,6 @@ import { values } from "./values";
 // Start with two routes: The Main screen, with the Login screen on top.
 const firstAction = AppNavigator.router.getActionForPathAndParams("Home");
 const secondAction = AppNavigator.router.getActionForPathAndParams("List");
-const initialNavState = AppNavigator.router.getStateForAction(firstAction);
 const nav = (state, action) => {
 	switch (action.type) {
 		case "GO_BACK": {
@@ -23,7 +22,6 @@ const nav = (state, action) => {
 const AppReducer = combineReducers({
 	nav,
 	article,
-	category,
 	values
 });
 
