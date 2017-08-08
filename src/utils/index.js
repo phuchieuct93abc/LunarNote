@@ -191,7 +191,7 @@ const LunarSolarConverter = () => {
     }
     this.getLunarDate = function (date) {
         let object = LunarSolarConverter().SolarToLunar({
-            solarDay: date.getDay(),
+            solarDay: date.getDate(),
             solarMonth: date.getMonth(),
             solarYear: date.getFullYear()
 

@@ -2,10 +2,15 @@ import React from "react";
 import { View, Text, Button, StyleSheet, TouchableNativeFeedback, TextInput } from "react-native";
 import { connect } from "react-redux";
 import { NavigationActions } from "react-navigation";
-import { selectCategory } from "../actions";
+import { addTodo } from "../actions";
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import LunarSolarConverter from '../utils'
 import NoteEditor from '../components/newNote'
+
+import { pathToJS,firebaseConnect,firebase,dataToJS } from 'react-redux-firebase'
+
+
+
 class Home extends React.Component {
 
   constructor(props) {
@@ -15,12 +20,31 @@ class Home extends React.Component {
       modalVisible: false
     };
     this._createNewNote = this._createNewNote.bind(this)
+    this.props.firebase.login({
+      email:"hieu@gmail.com",
+      password:"hieu12"
+    })
   }
+  getTodos(){
+if(this.props.todos){
+return  Object.keys(this.props.todos).map(
+            (key, id) => (
+              <View>
+              <Text>Title: {this.props.todos[key].title}</Text>
+              <Text>Description: {this.props.todos[key].description}</Text>
+              </View>
+            )
+          )
+
+  }
+
+}
+
+
 
 
   render() {
-    return (
-      <View style={{ flex: 1 }}>
+    let calendar = ( <View style={{ flex: 1 }}>
         <NoteEditor ref={"modal3"} selectedDate={this.state.selectedDate} />
         <Agenda
           items={this.state.items}
@@ -30,6 +54,12 @@ class Home extends React.Component {
           renderEmptyDate={this.renderEmptyDate.bind(this)}
           rowHasChanged={this.rowHasChanged.bind(this)}
         />
+
+      </View>)
+    return (
+      <View style={{flex:1}}>
+        {this.getTodos()}
+      <NoteEditor style={{flex:1}} save={this.props.addTodo}></NoteEditor>
 
       </View>
 
@@ -52,7 +82,7 @@ class Home extends React.Component {
   loadItems(day) {
 
 
-
+/*
     setTimeout(() => {
       for (let i = -15; i < 85; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
@@ -75,6 +105,7 @@ class Home extends React.Component {
         items: newItems
       });
     }, 1000);
+    */
     // console.log(`Load Items for ${day.year}-${day.month}`);
   }
 
@@ -112,7 +143,7 @@ class Home extends React.Component {
   }
   _createNewNote(date) {
     console.log("AAAAAAAA", date['0'])
-    this.setState({selectedDate :date['0']})
+    this.setState({ selectedDate: date['0'] })
     this.refs.modal3.open()
 
 
@@ -143,20 +174,28 @@ Home.navigationOptions = {
 const Color = {
   button: "#2096F3"
 };
-const mapStateToProps = state => {
+const mapStateToProps = ({ firebase: { auth, data: { todos }} }) => {
   return {
+   todos:todos,
+    auth:auth
+  }
+ 
+  }
 
-  };
-};
+
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    moveToList: id => {
-      dispatch(selectCategory(id));
-      dispatch(NavigationActions.navigate({ routeName: "List" }));
+    addTodo: (item) => {
+      dispatch(addTodo(item));
     }
   };
 };
+const wrappedTodos = firebaseConnect([
+  '/todos'
+])(Home)
 
-const HomeScreen = connect(mapStateToProps, mapDispatchToProps)(Home);
+const HomeScreen =connect(mapStateToProps,mapDispatchToProps)(wrappedTodos)
+
 
 export default HomeScreen;

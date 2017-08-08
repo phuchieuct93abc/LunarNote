@@ -1,13 +1,14 @@
 import  dateFormat from 'dateformat';
 
 
-export const DateFormater=(date,month,year)=>{
+export const DateFormatter=(date,month,year)=>{
+    console.log(date,month,year)
 let result = new Date();
-result.setDate(date),
+result.setDate(date);
 result.setFullYear(year);
 result.setMonth(month);
-
-return dateFormat(now, "dddd, mmmm dS, yyyy");
-
+console.log(dateFormat(result, "dddd, mmmm dS, yyyy"))
+return dateFormat(result, "dddd, mmmm dS, yyyy");
+ 
 
 }
