@@ -7,7 +7,7 @@ import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import LunarSolarConverter from '../utils'
 import NoteEditor from '../components/newNote'
 
-import { pathToJS,firebaseConnect,firebase,dataToJS } from 'react-redux-firebase'
+import { pathToJS, firebaseConnect, firebase, dataToJS ,populate} from 'react-redux-firebase'
 
 
 
@@ -20,46 +20,48 @@ class Home extends React.Component {
       modalVisible: false
     };
     this._createNewNote = this._createNewNote.bind(this)
-    this.props.firebase.login({
-      email:"hieu@gmail.com",
-      password:"hieu12"
-    })
-  }
-  getTodos(){
-if(this.props.todos){
-return  Object.keys(this.props.todos).map(
-            (key, id) => (
-              <View>
-              <Text>Title: {this.props.todos[key].title}</Text>
-              <Text>Description: {this.props.todos[key].description}</Text>
-              </View>
-            )
-          )
 
   }
+    componentDidMount(){
 
-}
+       
+    }
+
+  getTodos() {
+    if (this.props.todos) {
+      return Object.keys(this.props.todos).map(
+        (key, id) => (
+          <View key={key}>
+            <Text>Title: {this.props.todos[key].title}</Text>
+            <Text>Description: {this.props.todos[key].description}</Text>
+          </View>
+        )
+      )
+
+    }
+
+  }
 
 
 
 
   render() {
-    let calendar = ( <View style={{ flex: 1 }}>
-        <NoteEditor ref={"modal3"} selectedDate={this.state.selectedDate} />
-        <Agenda
-          items={this.state.items}
-          loadItemsForMonth={this.loadItems.bind(this)}
-          selected={'2017-05-16'}
-          renderItem={this.renderItem.bind(this)}
-          renderEmptyDate={this.renderEmptyDate.bind(this)}
-          rowHasChanged={this.rowHasChanged.bind(this)}
-        />
+    let calendar = (<View style={{ flex: 1 }}>
+      <NoteEditor ref={"modal3"} selectedDate={this.state.selectedDate} />
+      <Agenda
+        items={this.state.items}
+        loadItemsForMonth={this.loadItems.bind(this)}
+        selected={'2017-05-16'}
+        renderItem={this.renderItem.bind(this)}
+        renderEmptyDate={this.renderEmptyDate.bind(this)}
+        rowHasChanged={this.rowHasChanged.bind(this)}
+      />
 
-      </View>)
+    </View>)
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         {this.getTodos()}
-      <NoteEditor style={{flex:1}} save={this.props.addTodo}></NoteEditor>
+        <NoteEditor style={{ flex: 1 }} save={this.props.addTodo}></NoteEditor>
 
       </View>
 
@@ -82,30 +84,30 @@ return  Object.keys(this.props.todos).map(
   loadItems(day) {
 
 
-/*
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        if (!this.state.items[strTime]) {
-          this.state.items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 5);
-          for (let j = 0; j < numItems; j++) {
-            this.state.items[strTime].push({
-              name: 'Item for ' + strTime,
-              height: Math.max(50, Math.floor(Math.random() * 150))
-            });
+    /*
+        setTimeout(() => {
+          for (let i = -15; i < 85; i++) {
+            const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+            const strTime = this.timeToString(time);
+            if (!this.state.items[strTime]) {
+              this.state.items[strTime] = [];
+              const numItems = Math.floor(Math.random() * 5);
+              for (let j = 0; j < numItems; j++) {
+                this.state.items[strTime].push({
+                  name: 'Item for ' + strTime,
+                  height: Math.max(50, Math.floor(Math.random() * 150))
+                });
+              }
+            }
           }
-        }
-      }
-      //console.log(this.state.items);
-      const newItems = {};
-      Object.keys(this.state.items).forEach(key => { newItems[key] = this.state.items[key]; });
-      this.setState({
-        items: newItems
-      });
-    }, 1000);
-    */
+          //console.log(this.state.items);
+          const newItems = {};
+          Object.keys(this.state.items).forEach(key => { newItems[key] = this.state.items[key]; });
+          this.setState({
+            items: newItems
+          });
+        }, 1000);
+        */
     // console.log(`Load Items for ${day.year}-${day.month}`);
   }
 
@@ -174,14 +176,10 @@ Home.navigationOptions = {
 const Color = {
   button: "#2096F3"
 };
-const mapStateToProps = ({ firebase: { auth, data: { todos }} }) => {
-  return {
-   todos:todos,
-    auth:auth
-  }
- 
-  }
-
+const mapStateToProps =({ firebase: { data: { todos } } }) => ({ // state.firebase.data.todos
+    // todos prop set to firebase data in redux under '/todos'
+    todos,
+  })
 
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -192,10 +190,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 const wrappedTodos = firebaseConnect([
-  '/todos'
+    'todos'
 ])(Home)
 
-const HomeScreen =connect(mapStateToProps,mapDispatchToProps)(wrappedTodos)
+const HomeScreen = connect(mapStateToProps, mapDispatchToProps)(wrappedTodos)
 
 
 export default HomeScreen;

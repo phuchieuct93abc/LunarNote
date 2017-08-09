@@ -1,9 +1,13 @@
 export const addTodo = (newTodo) =>
   (dispatch, getState, getFirebase) => {
-    const firebase = getFirebase()
-    firebase
-    firebase.push('/todos', newTodo)
-      .then(() => {
+  const firebase = getFirebase()
+  
+ 
+  
+    
+    firebase.push('/todos', newTodo).set({
+    owner:"phuchieu",...newTodo
+  }).then(() => {
       dispatch({type:"FINISHED"})
       })
   };

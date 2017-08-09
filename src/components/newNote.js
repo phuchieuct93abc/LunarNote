@@ -47,8 +47,8 @@ description:this.state.description
 
         return (
           <View>
-                <Text>Selected Date</Text>
-                {this.convertToLunar(this.props.selectedDate)}
+                {/* <Text>Selected Date</Text>
+                {this.convertToLunar(this.props.selectedDate)} */}
                 <TextInput
                     placeholder={"Title"}
 
