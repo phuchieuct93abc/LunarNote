@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 @firebaseConnect()
 @connect(mapStateToProps, mapDispatchToProps)
-class Authenticate extends Component {
+export default class Authenticate extends Component {
   static componentName = 'Authenticate';
   login() {
 
@@ -103,7 +103,7 @@ class Authenticate extends Component {
               </Item>
 
               <Button block success onPress={this.login.bind(this)}>
-                <Text>Success</Text>
+                <Text>Login</Text>
               </Button>
               <FBLogin
                 buttonView={<FBLoginView />}
@@ -157,4 +157,4 @@ class Authenticate extends Component {
 }
 
 /* Export Component ==================================================================== */
-export default Authenticate;
+

@@ -1,4 +1,4 @@
-package com.starterkit;
+package com.hieu.lunarnote;
 
 import com.facebook.react.ReactActivity;
 

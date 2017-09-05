@@ -1,5 +1,5 @@
 <resources>
  <string name="fb_app_id">335282260227376</string>
     <string name="fb_login_protocol_scheme">fb335282260227376</string>
-    <string name="app_name">Suduko</string>
+    <string name="app_name">LunarNote</string>
 </resources>
