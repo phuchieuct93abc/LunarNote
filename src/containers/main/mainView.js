@@ -17,7 +17,7 @@ import Table from "../../components/table"
 import DrawerView from '@containers/ui/DrawerContainer';
 import { Calendar,Agenda} from 'react-native-calendars';
 import Modal from 'react-native-modalbox';
-
+import EditNote from '../editNote'
 
 
 /* Component ==================================================================== */
@@ -93,18 +93,19 @@ export default class MainView extends Component {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
-  onCloseModel(){
-    this.setState({isOpenModal:false})
-  }
-  onOpenModal(){
-    this.setState({isOpenModal:true})
+  onCloseModal() {
+    this.setState({ isOpenModal: false })
+}
+onOpenModal() {
+    this.setState({ isOpenModal: true })
 
-  }
+}
   render = () => {
     let invisible;
     if(this.state.isOpenModal){
         invisible = styles.invisible
     }
+
    
     return     (<Drawer
       ref={(ref) => { this.drawer = ref; }}
@@ -138,22 +139,16 @@ export default class MainView extends Component {
              <Fab
             style={{ backgroundColor: '#5067FF' }}
             position="bottomRight" 
-            onPress={() => this.refs.modal.open()}>
+            onPress={() => this.setState({isOpenModal:true})}>
             <Icon name="add" />
             </Fab>
           </View>
-         
+          <EditNote isOpen={this.state.isOpenModal}
+           onCloseModal={this.onCloseModal.bind(this)}
+            onOpenModal={this.onOpenModal.bind(this)} />     
 
 
-            <Modal
-          style={[styles.modal]}
-          ref={"modal"}
-          swipeToClose={true}
- onClosed={this.onCloseModel.bind(this)}
-          onOpened={this.onOpenModal.bind(this)}
-          >
-            <Text style={styles.text}>Basic modal</Text>
-        </Modal>
+           
         </View>
 
       </Container>
@@ -184,10 +179,7 @@ const styles = StyleSheet.create({
     flex:1,
     paddingTop: 30
   },
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+
   invisible:{
     display:"none"
   }
