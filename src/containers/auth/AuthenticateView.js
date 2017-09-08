@@ -48,9 +48,9 @@ export default class Authenticate extends Component {
     }).then((item) => {
       this.props.nextScene()
 
-    }).catch(() => {
+    }).catch((erro) => {
 
-      ToastAndroid.show('Login failed 123', ToastAndroid.SHORT);
+      ToastAndroid.show(erro, ToastAndroid.SHORT);
 
     })
   }

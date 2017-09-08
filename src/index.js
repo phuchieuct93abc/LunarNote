@@ -43,14 +43,15 @@ let middleware = [
 //   ];
 // }
 
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCa0TF3QOdX-UcK-eNCSTAFhIpK5WzO02w",
-  authDomain: "boilerplate-23818.firebaseapp.com",
-  databaseURL: "https://boilerplate-23818.firebaseio.com",
-  projectId: "boilerplate-23818",
-  storageBucket: "boilerplate-23818.appspot.com",
-  messagingSenderId: "443078071781"
-}
+  apiKey: "AIzaSyDMGKJYnKpd4PB_j0x7NSCKYsn1goX_u2U",
+  authDomain: "lunarnote-c03da.firebaseapp.com",
+  databaseURL: "https://lunarnote-c03da.firebaseio.com",
+  projectId: "lunarnote-c03da",
+  storageBucket: "lunarnote-c03da.appspot.com",
+  messagingSenderId: "491783415305"
+};
 firebase.initializeApp(firebaseConfig)
 // react-redux-firebase options
 const config = {

@@ -32,11 +32,13 @@ const mapDispatchToProps = (dispatch) => ({});
 export default class EditNote extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            note: {}
+        }
     }
 
     componentDidUpdate() {
         if (this.props.isOpen) {
-            console.log("123")
             this.refs.modal.open()
         } else {
             this.refs.modal.close()
@@ -44,16 +46,23 @@ export default class EditNote extends Component {
 
 
     }
+    onCloseModal() {
+        this.props.onCancel()
+    }
+    onOpenModal() {
 
-    render = () => {
+    }
+    onSave() {
+        this.props.onSave(this.state.note)
 
-        return (
+    }
+    render = () =>  (
             <Modal
                 style={[styles.modal]}
                 ref={"modal"}
                 swipeToClose={true}
-                onClosed={this.props.onCloseModal}
-                onOpened={this.props.onOpenModal}
+                onClosed={this.onCloseModal.bind(this)}
+                onOpened={this.onOpenModal.bind(this)}
                 style={{ flex: 1 }}
             >
                 <Content>
@@ -81,7 +90,7 @@ export default class EditNote extends Component {
                             <Row>
                                 <Item floatingLabel style={{ flex: 1 }}>
                                     <Label>Title</Label>
-                                    <Input onChangeText={(title) => this.setState({ title })} />
+                                    <Input onChangeText={(title) => this.setState({ note: { ...this.state.note,title } })} />
                                 </Item>
                             </Row>
                             <Row>
@@ -89,13 +98,13 @@ export default class EditNote extends Component {
                                     <Label>Description</Label>
                                     <Input
                                         multiline={true} numberOfLines={4}
-                                        onChangeText={(title) => this.setState({ title })} />
+                                        onChangeText={(description) => this.setState({ note: {  ...this.state.note,description } })} />
                                 </Item>
 
                             </Row>
                             <Row style={{ justifyContent: "flex-end" }}>
-                                <Button transparent ><Text>Cancel</Text></Button>
-                                <Button transparent><Text>Save</Text></Button>
+                                <Button transparent onPress={this.onCloseModal.bind(this)}><Text>Cancel</Text></Button>
+                                <Button transparent onPress={this.onSave.bind(this)}><Text>Save</Text></Button>
                             </Row>
 
                         </Grid>
@@ -104,7 +113,7 @@ export default class EditNote extends Component {
             </Modal>
 
         );
-    }
+    
 }
 const styles = StyleSheet.create({
 

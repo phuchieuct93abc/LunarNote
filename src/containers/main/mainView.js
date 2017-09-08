@@ -18,25 +18,13 @@ import DrawerView from '@containers/ui/DrawerContainer';
 import { Calendar,Agenda} from 'react-native-calendars';
 import Modal from 'react-native-modalbox';
 import EditNote from '../editNote'
-
+import {addTodo} from '../../actions'
 
 /* Component ==================================================================== */
 @firebaseConnect()
-@connect(
-  ({ firebase: { auth }, currentSudoku: { data } }) => ({
-    auth,
-    table: data
-
-  }),
-  (dispatch) => (
-
-    {
-     
-
-    }
-  )
-
-)
+@connect(({firebase:{auth}})=>({
+  auth
+}))
 export default class MainView extends Component {
   constructor(props) {
     super(props);
@@ -44,6 +32,15 @@ export default class MainView extends Component {
       items: {},
       isOpenModal:false
     };
+  }
+  componentDidUpdate(){
+
+
+    if(isLoaded()){
+      addTodo({title:"title",description:"description"},
+      this.props.auth.uid)    
+      
+    }
   }
 
   
@@ -93,8 +90,12 @@ export default class MainView extends Component {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
-  onCloseModal() {
+  onSave(note) {
+    addTodo(note)
     this.setState({ isOpenModal: false })
+}
+onCancel() {
+  this.setState({ isOpenModal: false })
 }
 onOpenModal() {
     this.setState({ isOpenModal: true })
@@ -144,7 +145,8 @@ onOpenModal() {
             </Fab>
           </View>
           <EditNote isOpen={this.state.isOpenModal}
-           onCloseModal={this.onCloseModal.bind(this)}
+          onSave={this.onSave.bind(this)}
+          onCancel={this.onCancel.bind(this)}
             onOpenModal={this.onOpenModal.bind(this)} />     
 
 
